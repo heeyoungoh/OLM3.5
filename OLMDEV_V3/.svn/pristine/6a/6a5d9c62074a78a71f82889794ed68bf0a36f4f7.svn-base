@@ -1,0 +1,100 @@
+#HSO Web Service Client (Create Method Parameter)
+CSR_WSDL_SERVICE = SO_OLM_CHANGE
+CSR_WSDL_SERVICE_URL = http://ep.hanwha-solarone.com/
+
+#LF SAP Link
+LF_SAP_MAX_CONNECT = 100
+LF_SAP_CLIENT_NO = 100
+LF_SAP_USER_ID = IF_IDMS
+LF_SAP_PASSWORD = ifadminidms0
+LF_SAP_LANGUAGE = KO
+LF_SAP_SERVER_IP = 165.244.231.68
+LF_SAP_SYSTEM_NO = 00
+LF_SAP_SYSTEM_ID = LFP_POS
+LF_SAP_R3_NAME = LFP
+LF_SAP_HOST_NAME = LGFLFPDB0
+LF_SAP_SERVER_NAME = LGFERP_REAL
+LF_SAP_POOL_NAME = SAP_POOL_NAME
+LF_SAP_GROUP = LGFLFP
+
+#LF WEP Link
+LF_WEB_MDP_URL = http://10.49.8.194:9003/mdp/index.jsp
+LF_WEB_PLM_URL = http://10.49.8.220:8080/enovia/servlet/lfcssologin		
+				
+#HANWHA 
+HW_WSDL_SERVICE_URL = http://htg.circle.hanwha.com/ 
+#HW_WSDL_SERVICE_URL = http://hanwha.eagleoffice.co.kr/
+HW_COMPANY_ID = 503
+HW_SYSTEM_ID = 503AP0028
+HW_ADRM_WSDL_SERVICE_URL = http://96.97.23.66:8080/
+HW_ADRM_WS_KEY = A1234 
+HW_ADRM_SERVICE_CODE =  PRIME_001
+HW_GROUPWARE_URL = http://htg.circle.hanwha.com/neo/branch/common/slo/goSloTarget.mvc?authType=2&destination=
+
+
+#SKHynix Link
+SK_MPM_URL = http://heps.skhynix.com/sso/agentless/agentless_redirect.jsp?initpage=http://mpm.skhynix.com/indexSK.jsp
+#DEV  url=http://ssodev.skhynix.com/sso/agentless/agentless_redirect.jsp?initpage=http://mpmdev.skhynix.com/indexSK.jsp
+# http://sso.skhynix.com/sso/agentless/agentless_redirect.jsp?initpage=http://mpm.skhynix.com/indexSK.jsp
+SK_ACC_RJC_URL = http://ssodev.skhynix.com/common/OnAccessReject.htm 
+SK_LOGOUT_URL = http://ssodev.skhynix.com/common/logout.asp?TARGET=http://10.156.20.117:8080/sso_login.jsp
+FILE_UPLOAD_CTS_DIR = C://OLMFILE//cts//
+
+#CJ Val
+CJ_SSO_URL = http://dev.cjwise.net
+#QA CJ_SSO_URL = http://qa.cjwise.net
+#Run CJ_SSO_URL = http://cjwise.net
+EMP_PHOTO_URL = https://ep.halla.com
+
+
+#DAELIM
+IEP_POP_URL = http://portal.daelimplant.com/ProjectPortal/UserControls/BestPractice/BestPracticeDetailView.aspx
+DLM_WEBSERVICE_URL = http://172.20.101.23:8880/ifweb/services/DLMWebService?wsdl
+
+#DAESANG
+DS_ERP_URL = http://ep.erpd.daesang.com:50000/daesangSSO/sso.jsp
+
+#CSI
+CSI_HOST = dskorea.com
+CSI_BASEDN = DC=dskorea,DC=com
+CSI_LDAP = 203.228.108.2
+
+#HYUNDAI HEC
+lgySystemId = H-WAY
+wfDocOpenJspUrl = /custom/hyundai/hec/wf/zhec_goWorkflow
+wfViewAPIUrl = https://autowaywf.hyundai.net/HECWebService/ExternalWebService.asmx?wsdl
+wfDocViewJspUrl = /custom/hyundai/hec/wf/zhec_goProcess
+dftCompId = H139
+
+#DRM
+
+DRM_SOFTCAMP_KEY = d:/softcamp/04_KeyFile/keyDAC_SVR0.sc
+DRM_SOFTCAMP_MODULE_PATH = d:/softcamp/02_Module/02_ServiceLinker/softcamp.properties
+
+# FASOO
+DRM_KEY_ID =
+DRM_DECODING_FILEPATH = C://OLMFILE//file//fsdinit
+
+#WISE NUT \uc778\uae30\uac80\uc0c9\uc5b4 API URL
+#\uc6b4\uc601
+#WISENUT_POPULAR_URL = http://10.224.1.151:7800/manager/WNRun.do?target=popword&collection=KPAL&range=W
+#\uac1c\ubc1c 
+WISENUT_POPULAR_URL = http://10.224.99.221:7800/manager/WNRun.do?target=popword&collection=KPAL&range=W 
+
+
+#MANDO
+#MND_SYS_KEY =58SYafe967-b9ed-48b6-8c9fa-a88f456f28c
+#MND_PWD_KEY =356712568400906510087672
+#MND_CONTENTS =CONTENTS.BPMS.SSO
+
+#MANDO BROSE
+MND_SYS_KEY = Wd12UYai12-ag79-00UI-09L56-f3703hdlv4du
+MND_PWD_KEY = 357685418026927878907316
+MND_CONTENTS = CONTENTS.MBCOBPMS.SSO
+
+#SSG Val
+SSG_SSO_URL = https://ssodev.emart.com:8443
+	
+AIP_NAS = \\\\\\\\10.224.200.107\\\\aip\\\\ifd\\\\nonsap\\\\pal
+AIP_SVR_ADDR = http://aipgw.emart.com
+AIP_SYS_ID = 5FA347DF-4C0A-43EC-B90F-D6DB7BD4C40B

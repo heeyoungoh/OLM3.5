@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xmlns:tx="http://www.springframework.org/schema/tx"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans   
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+      
+ <tx:annotation-driven transaction-manager="transactionManager" />      
+ 
+
+ <!-- ############################################################################################## -->
+ <!-- ==============   LOADING DATASOURCE =============================================== -->
+ <!-- ############################################################################################## -->
+ <!-- Local Apache Commons DBCP DataSource that refers to a combined database -->
+ <!-- The placeholders are resolved from jdbc.properties through -->
+
+ <bean id="xboltDataSource" class="org.springframework.jndi.JndiObjectFactoryBean" >
+  <property name="jndiName" value="java:comp/env/jdbc/xboltDB" />
+ </bean>
+ 
+ <!-- ############################################################################################## -->
+ <!-- ==============  TRANSACTION MANAGER =============================================== -->
+ <!-- ############################################################################################## -->      
+ <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="xboltDataSource" />
+ </bean> 
+ 
+<tx:advice id="txAdvice" transaction-manager="transactionManager">
+	<tx:attributes>
+		<tx:method name="get" read-only="true"/>
+		<tx:method name="*" rollback-for="Exception"/>
+	</tx:attributes>
+</tx:advice>
+<aop:config>
+		<aop:pointcut id="requiredTx"
+			expression="execution(* xbolt..*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdvice"
+			pointcut-ref="requiredTx" />
+</aop:config>
+
+ <!-- ############################################################################################## -->
+ <!-- ==============  IBATISE SQL CONFIG =============================================== -->
+ <!-- ############################################################################################## -->
+ <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+ 	<property name="configLocation" value="classpath:/sqlMap/mssql/msSQLMapConfig.xml"/>
+	<property name="dataSource" ref="xboltDataSource" />
+ </bean>
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+ 	<constructor-arg index="0" ref="sqlSessionFactory" />
+ </bean>
+ 
+
+<!-- ###########  XAP Oracle Config  ############################################################ -->
+<!-- 
+ <bean id="orclDataSource" class="org.springframework.jndi.JndiObjectFactoryBean" >
+  <property name="jndiName" value="java:comp/env/jdbc/orclDB" />
+ </bean>
+ 
+ <tx:annotation-driven transaction-manager="transactionManager2" />   	
+ <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="orclDataSource" />
+ </bean> 
+<tx:advice id="txAdvice2" transaction-manager="transactionManager2">
+	<tx:attributes>
+		<tx:method name="get" read-only="true"/>
+		<tx:method name="*" rollback-for="Exception"/>
+	</tx:attributes>
+</tx:advice>
+   
+	<aop:config>
+		<aop:pointcut id="requiredTx"
+			expression="execution(* xbolt..*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdvice"
+			pointcut-ref="requiredTx" />
+		<aop:advisor id="transactionAdvisor2" pointcut-ref="requiredTx" advice-ref="txAdvice2"/>
+
+	</aop:config>
+	
+ <bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+ 	<property name="configLocation" value="classpath:/sqlMap/xap/orclMapConfig.xml"/>
+	<property name="dataSource" ref="orclDataSource" />
+ </bean>
+ <bean id="orclSession" class="org.mybatis.spring.SqlSessionTemplate">
+ 	<constructor-arg index="0" ref="sqlSessionFactory2" />
+ </bean>
+-->
+	
+
+  
+ <!-- ###########  XAP MSSQL Config  ############################################################ -->
+
+<!--  
+ <bean id="xboltDataSource3" class="org.springframework.jndi.JndiObjectFactoryBean" >
+  <property name="jndiName" value="java:comp/env/jdbc/xboltDB3" />
+ </bean>
+  <bean id="transactionManager3" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="xboltDataSource3" />
+ </bean> 
+ <tx:advice id="txAdvice3" transaction-manager="transactionManager3">
+	<tx:attributes>
+		<tx:method name="get" read-only="true"/>
+		<tx:method name="*" rollback-for="Exception"/>
+	</tx:attributes>
+</tx:advice>
+<aop:config>
+	<aop:pointcut id="requiredTx3"
+		expression="execution(* xbolt..*Impl.*(..))"/>
+	<aop:advisor advice-ref="txAdvice3"
+		pointcut-ref="requiredTx" />
+</aop:config>
+
+ <bean id="sqlSessionFactory3" class="org.mybatis.spring.SqlSessionFactoryBean">
+ 	<property name="configLocation" value="classpath:/sqlMap/xap/xmsSQLMapConfig.xml"/>
+	<property name="dataSource" ref="xboltDataSource3" />
+ </bean> 
+ <bean id="xsqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+ 	<constructor-arg index="0" ref="sqlSessionFactory3" />
+ </bean>
+-->
+</beans>

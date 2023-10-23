@@ -1,0 +1,837 @@
+
+INSERT INTO XBOLTADM.TB_ARC
+           (ArcCode
+           ,ParentID
+           ,SortNum
+           ,Level
+           ,Type
+           ,FilterType
+           ,UntitledOption
+           ,DimTypeID
+           ,MstObjectID
+           ,RefPGID
+           ,MenuID
+           ,VarFilter
+           ,Style
+           ,Icon
+           ,WID
+           ,IDFilter
+           ,OwnerID
+           ,OwnerGRID
+           ,SortOption
+           ,Deactivated
+           ,Creator
+           ,CreationTime
+           ,LastUpdated
+           ,LastUser
+           ,ClientID )
+
+     SELECT ArcCode
+      ,ParentID
+      ,SortNum
+      ,Level
+      ,Type
+      ,FilterType
+      ,UntitledOption
+      ,DimTypeID
+      ,MstObjectID
+      ,RefPGID
+      ,MenuID
+      ,VarFilter
+      ,Style
+      ,Icon
+      ,WID
+      ,IDFilter
+      ,OwnerID
+      ,OwnerGRID
+      ,SortOption
+      ,Deactivated
+      ,Creator
+      ,CreationTime
+      ,LastUpdated
+      ,LastUser
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_ARC
+
+
+
+INSERT INTO XBOLTADM.TB_ARC_FILTER
+           (ArcCode
+           ,ConTypeCode
+           ,RootItemID
+           ,ObjTypeCode
+           ,ClientID)
+   
+SELECT ArcCode
+      ,ConTypeCode
+      ,RootItemID
+      ,ObjTypeCode
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_ARC_FILTER
+
+
+
+
+  INSERT INTO XBOLTADM.TB_ARC_FILTER_CLS
+           (ArcCode
+           ,ItemClassCode
+           ,Included
+           ,IsSecondary
+           ,SClass
+           ,FClass
+           ,FLevel
+           ,ClientID)
+    SELECT ArcCode
+      ,ItemClassCode
+      ,Included
+      ,IsSecondary
+      ,SClass
+      ,FClass
+      ,FLevel
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_ARC_FILTER_CLS
+
+
+INSERT INTO XBOLTADM.TB_ARC_FILTER_DIM
+           (ArcCode
+           ,ObjTypeCode
+           ,DimTypeID
+           ,DefDimValueID
+           ,ClientID)    
+SELECT ArcCode
+      ,ObjTypeCode
+      ,DimTypeID
+      ,DefDimValueID
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_ARC_FILTER_DIM
+
+
+  INSERT INTO XBOLTADM.TB_MENU
+           (MenuID
+           ,MenuCat
+           ,MenuType
+           ,DicCode
+           ,URL
+           ,VarFilter
+           ,MNLVL
+           ,Icon
+           ,Deactivated
+           ,SortNum
+           ,ItemID
+           ,CreationTime
+           ,Creator
+           ,LastUser
+           ,LastUpdated)
+   SELECT MenuID
+      ,MenuCat
+      ,MenuType
+      ,DicCode
+      ,URL
+      ,VarFilter
+      ,MNLVL
+      ,Icon
+      ,Deactivated
+      ,SortNum
+      ,ItemID
+      ,CreationTime
+      ,Creator
+      ,LastUser
+      ,LastUpdated
+  FROM gbpms.XBOLTADM.TB_MENU
+
+
+
+  INSERT INTO XBOLTADM.TB_TEMPL
+           (TemplCode
+           ,Type
+           ,MenuID
+           ,VarFilter
+           ,Style
+           ,SortNum
+           ,ProjectID
+           ,Deactivated
+           ,Invisible
+           ,DefLanguageID
+           ,Creator
+           ,CreationTime
+           ,LastUpdated
+           ,LastUser
+           ,ClientID)
+   SELECT TemplCode
+      ,Type
+      ,MenuID
+      ,VarFilter
+      ,Style
+      ,SortNum
+      ,ProjectID
+      ,Deactivated
+      ,Invisible
+      ,DefLanguageID
+      ,Creator
+      ,CreationTime
+      ,LastUpdated
+      ,LastUser
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_TEMPL
+
+  
+INSERT INTO XBOLTADM.TB_ARC_TEMPL
+           (TemplCode
+           ,ArcCode
+           ,SortNum
+           ,Type
+           ,MenuID
+           ,Deactivated
+           ,Creator
+           ,CreationTime
+           ,LastUpdated
+           ,LastUser
+           ,ProjectID
+           ,ClientID)
+    
+SELECT TemplCode
+      ,ArcCode
+      ,SortNum
+      ,Type
+      ,MenuID
+      ,Deactivated
+      ,Creator
+      ,CreationTime
+      ,LastUpdated
+      ,LastUser
+      ,ProjectID
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_ARC_TEMPL 
+
+
+INSERT INTO XBOLTADM.TB_BOARD_MGT
+           (BoardMgtID
+           ,ParentID
+           ,CompanyID
+           ,DicTypeCode
+           ,BoardMgtDES
+           ,BoardTypeCD
+           ,Icon
+           ,ReplyYN
+           ,CommentYN
+           ,AttachYN
+           ,FilePath
+           ,PasswordYN
+           ,MgtOnlyYN
+           ,CategoryYN
+           ,LikeYN
+           ,PointYN
+           ,PostEmailYN
+           ,ReplyOption
+           ,LineCNT
+           ,PageCNT
+           ,MgtUserID
+           ,MgtGRID
+           ,OrderNO
+           ,RegDT
+           ,RegUserID
+           ,ModDT
+           ,ModUserID
+           ,DocCategory
+           ,Deactivated)     
+ SELECT BoardMgtID
+      ,ParentID
+      ,CompanyID
+      ,DicTypeCode
+      ,BoardMgtDES
+      ,BoardTypeCD
+      ,Icon
+      ,ReplyYN
+      ,CommentYN
+      ,AttachYN
+      ,FilePath
+      ,PasswordYN
+      ,MgtOnlyYN
+      ,CategoryYN
+      ,LikeYN
+      ,PointYN
+      ,PostEmailYN
+      ,ReplyOption
+      ,LineCNT
+      ,PageCNT
+      ,MgtUserID
+      ,MgtGRID
+      ,OrderNO
+      ,RegDT
+      ,RegUserID
+      ,ModDT
+      ,ModUserID
+      ,DocCategory
+      ,Deactivated
+  FROM gbpms.XBOLTADM.TB_BOARD_MGT
+
+
+
+  INSERT INTO XBOLTADM.TB_BOARD_MGT_ALLOC
+           (BoardMgtID
+           ,TemplCode
+           ,ProjectID
+           ,SortNum)
+    SELECT BoardMgtID
+      ,TemplCode
+      ,ProjectID
+      ,SortNum
+  FROM gbpms.XBOLTADM.TB_BOARD_MGT_ALLOC
+
+
+
+  INSERT INTO XBOLTADM.TB_BOARD_MGT_CAT
+           (BoardMgtID
+           ,CategoryCode
+           ,SortNum)
+  SELECT BoardMgtID
+      ,CategoryCode
+      ,SortNum
+  FROM gbpms.XBOLTADM.TB_BOARD_MGT_CAT
+
+
+  
+
+
+INSERT INTO XBOLTADM.TB_BOARD
+           (BoardID
+           ,BoardMgtID
+           ,Category
+           ,Subject
+           ,Content
+           ,ItemID
+           ,ItemTypeCode
+           ,InstanceNo
+           ,ProjectID
+           ,ChangeSetID
+           ,TeamID
+           ,CompanyID
+           ,RefID
+           ,ParentID
+           ,ReplyLev
+           ,SortNum
+           ,ReadCNT
+           ,RegDT
+           ,RegUserID
+           ,ModDT
+           ,ModUserID
+           ,CommentCNT
+           ,Notice
+           ,ItemMgtUserID
+           ,ClosingDT
+           ,SRID
+           ,ClientID)   
+  SELECT BoardID
+      ,BoardMgtID
+      ,Category
+      ,Subject
+      ,Content
+      ,ItemID
+      ,ItemTypeCode
+      ,InstanceNo
+      ,ProjectID
+      ,ChangeSetID
+      ,TeamID
+      ,CompanyID
+      ,RefID
+      ,ParentID
+      ,ReplyLev
+      ,SortNum
+      ,ReadCNT
+      ,RegDT
+      ,RegUserID
+      ,ModDT
+      ,ModUserID
+      ,CommentCNT
+      ,Notice
+      ,ItemMgtUserID
+      ,ClosingDT
+      ,SRID
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_BOARD
+
+
+INSERT INTO XBOLTADM.TB_BOARD_ATTCH
+           (Seq
+           ,BoardID
+           ,CommentSeq
+           ,FileDesc
+           ,FileNM
+           ,FilePath
+           ,FileSize
+           ,FileRealNM
+           ,RegDT
+           ,RegUserID
+           ,DownCNT)   
+   SELECT Seq
+      ,BoardID
+      ,CommentSeq
+      ,FileDesc
+      ,FileNM
+      ,FilePath
+      ,FileSize
+      ,FileRealNM
+      ,RegDT
+      ,RegUserID
+      ,DownCNT
+  FROM gbpms.XBOLTADM.TB_BOARD_ATTCH
+
+
+INSERT INTO XBOLTADM.TB_FLTP
+           (FltpCode
+           ,DocCategory
+           ,FileFormat
+           ,FilePath
+           ,IsPublic
+           ,FileOption
+           ,ParentCode
+           ,RevisionYN
+           ,ClientID)
+    SELECT FltpCode
+      ,DocCategory
+      ,FileFormat
+      ,FilePath
+      ,IsPublic
+      ,FileOption
+      ,ParentCode
+      ,RevisionYN
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_FLTP
+
+  INSERT INTO XBOLTADM.TB_FLTP_ALLOC
+           (FltpCode
+           ,AssignmentType
+           ,DocCategory
+           ,LinkType
+           ,ItemClassCode
+           ,ProjectID
+           ,Mandatory
+           ,ClientID)
+    SELECT FltpCode
+      ,AssignmentType
+      ,DocCategory
+      ,LinkType
+      ,ItemClassCode
+      ,ProjectID
+      ,Mandatory
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_FLTP_ALLOC
+
+
+SELECT ModelTypeCode
+      ,ItemTypeCode
+      ,IsModel
+      ,Mandatory
+      ,MenuID
+      ,InfoTabURL
+      ,ZoomOption
+      ,Creator
+      ,LastUser
+      ,CreationTime
+      ,LastUpdated
+      ,ArisTypeNum
+      ,GlobalID
+      ,ClientID
+  FROM XBOLTADM.TB_MODEL_TYPE
+
+
+INSERT INTO XBOLTADM.TB_SYMBOL_TYPE
+           (SymTypeCode
+           ,SymCategory
+           ,FromSymType
+           ,ToSymType
+           ,ItemCategory
+           ,ItemTypeCode
+           ,ClassCode
+           ,DefLovCode
+           ,ImagePath
+           ,SortNum
+           ,DefWidth
+           ,DefHeight
+           ,DefFontColor
+           ,DefFontFamily
+           ,DefFontStyle
+           ,DefFontSize
+           ,DefColor
+           ,DefStrokeColor
+           ,DefFillColor
+           ,DefStrokeWidth
+           ,DefGradientColor
+           ,DefShadow
+           ,Dashed
+           ,DefLabelBGColor
+           ,DefSpacingTop
+           ,Deactivated
+           ,Creator
+           ,LastUser
+           ,CreationTime
+           ,LastUpdated
+           ,GlobalID
+           ,ClientID
+           ,ArisTypeNum
+           ,ArisSymbolNum
+           ,ArisSymbolGUID)    
+SELECT SymTypeCode
+      ,SymCategory
+      ,FromSymType
+      ,ToSymType
+      ,ItemCategory
+      ,ItemTypeCode
+      ,ClassCode
+      ,DefLovCode
+      ,ImagePath
+      ,SortNum
+      ,DefWidth
+      ,DefHeight
+      ,DefFontColor
+      ,DefFontFamily
+      ,DefFontStyle
+      ,DefFontSize
+      ,DefColor
+      ,DefStrokeColor
+      ,DefFillColor
+      ,DefStrokeWidth
+      ,DefGradientColor
+      ,DefShadow
+      ,Dashed
+      ,DefLabelBGColor
+      ,DefSpacingTop
+      ,Deactivated
+      ,Creator
+      ,LastUser
+      ,CreationTime
+      ,LastUpdated
+      ,GlobalID
+      ,ClientID
+      ,ArisTypeNum
+      ,ArisSymbolNum
+      ,ArisSymbolGUID
+  FROM gbpms.XBOLTADM.TB_SYMBOL_TYPE
+
+  INSERT INTO XBOLTADM.TB_SYMTYPE_ALLOCATION
+           (ModelTypeCode
+           ,SymTypeCode
+           ,ItemCategoryCode
+           ,ItemTypeCode
+           ,ClassCode
+           ,SortNum
+           ,MdlIF
+           ,Creator
+           ,CreationTime)   
+   SELECT ModelTypeCode
+      ,SymTypeCode
+      ,ItemCategoryCode
+      ,ItemTypeCode
+      ,ClassCode
+      ,SortNum
+      ,MdlIF
+      ,Creator
+      ,CreationTime
+  FROM gbpms.XBOLTADM.TB_SYMTYPE_ALLOCATION
+
+
+
+
+
+INSERT INTO XBOLTADM.TB_MODEL_DISPLAY
+           (TypeCode
+           ,Category
+           ,ScrnMode
+           ,AttrTypeCode
+           ,DisplayType
+           ,X
+           ,Y
+           ,Width
+           ,Height
+           ,FontSize
+           ,FontColor
+           ,FontStyle
+           ,FontFamily
+           ,StrokeWidth
+           ,StrokeColor
+           ,FillColor
+           ,LabelBackgroundColor
+           ,HTML
+           ,Creator
+           ,LastUser
+           ,CreationTime
+           ,LastUpdated)   
+SELECT TypeCode
+      ,Category
+      ,ScrnMode
+      ,AttrTypeCode
+      ,DisplayType
+      ,X
+      ,Y
+      ,Width
+      ,Height
+      ,FontSize
+      ,FontColor
+      ,FontStyle
+      ,FontFamily
+      ,StrokeWidth
+      ,StrokeColor
+      ,FillColor
+      ,LabelBackgroundColor
+      ,HTML
+      ,Creator
+      ,LastUser
+      ,CreationTime
+      ,LastUpdated
+  FROM gbpms.XBOLTADM.TB_MODEL_DISPLAY
+ 
+   
+   INSERT INTO XBOLTADM.TB_DIC_MASTER
+           (DicCategory
+           ,SysDomain
+           ,Name
+           ,Descriptioin)
+  SELECT DicCategory
+      ,SysDomain
+      ,Name
+      ,Descriptioin
+  FROM gbpms.XBOLTADM.TB_DIC_MASTER  
+
+  INSERT INTO XBOLTADM.TB_DICTIONARY
+           (TypeCode
+           ,LanguageID
+           ,Category
+           ,Name
+           ,Description
+           ,SortNum
+           ,VarFilter
+           ,Editable
+           ,ClientID)   
+SELECT TypeCode
+      ,LanguageID
+      ,Category
+      ,Name
+      ,Description
+      ,SortNum
+      ,VarFilter
+      ,Editable
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_DICTIONARY
+
+  INSERT INTO XBOLTADM.TB_DIM_VALUE
+           (DimTypeID
+           ,DimValueID
+           ,SortNum
+           ,ParentID
+           ,Level
+           ,Status
+           ,Deleted
+           ,Creator
+           ,CreationTime
+           ,LastUser
+           ,LastUpdated
+           ,MDMIF
+           ,ClientID)
+    SELECT  DimTypeID
+      ,DimValueID
+      ,SortNum
+      ,ParentID
+      ,Level
+      ,Status
+      ,Deleted
+      ,Creator
+      ,CreationTime
+      ,LastUser
+      ,LastUpdated
+      ,MDMIF
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_DIM_VALUE
+
+  INSERT INTO XBOLTADM.TB_DIM_VALUE_TXT
+           (DimTypeID
+           ,DimValueID
+           ,LanguageID
+           ,Name
+           ,Description)
+ SELECT DimTypeID
+      ,DimValueID
+      ,LanguageID
+      ,Name
+      ,Description
+  FROM gbpms.XBOLTADM.TB_DIM_VALUE_TXT
+
+  INSERT INTO XBOLTADM.TB_ITEM_DIM
+           (ItemTypeCode
+           ,ItemClassCode
+           ,ItemID
+           ,DimTypeID
+           ,DimValueID
+           ,RelType
+           ,Description)
+   SELECT ItemTypeCode
+      ,ItemClassCode
+      ,ItemID
+      ,DimTypeID
+      ,DimValueID
+      ,RelType
+      ,Description
+  FROM gbpms.XBOLTADM.TB_ITEM_DIM
+
+  
+INSERT INTO XBOLTADM.TB_REPORT
+           (ReportCode
+           ,ReportType
+           ,OutputType
+           ,Icon
+           ,Authority
+           ,IsPublic
+           ,ReportURL
+           ,ActionType
+           ,PWidth
+           ,PHeight
+           ,MessageCode
+           ,Deactivated
+           ,ReadCNT
+           ,Creator
+           ,CreationTime
+           ,LastUpdated
+           ,ClientID)
+    SELECT ReportCode
+      ,ReportType
+      ,OutputType
+      ,Icon
+      ,Authority
+      ,IsPublic
+      ,ReportURL
+      ,ActionType
+      ,PWidth
+      ,PHeight
+      ,MessageCode
+      ,Deactivated
+      ,ReadCNT
+      ,Creator
+      ,CreationTime
+      ,LastUpdated
+      ,ClientID
+  FROM gbpms.XBOLTADM.TB_REPORT
+
+  INSERT INTO XBOLTADM.TB_REPORT_ALLOCATION
+           (ReportCode
+           ,ClassCode
+           ,ProjectID
+           ,TemplCode
+           ,VarFilter
+           ,AllocationType
+           ,SortNum
+           ,ReportNMCode)
+   SELECT ReportCode
+      ,ClassCode
+      ,ProjectID
+      ,TemplCode
+      ,VarFilter
+      ,AllocationType
+      ,SortNum
+      ,ReportNMCode
+  FROM gbpms.XBOLTADM.TB_REPORT_ALLOCATION
+
+INSERT INTO XBOLTADM.TB_MY_ITEM
+           (ProjectID
+      --     ,ProcessID
+           ,MemberID
+           ,ItemID
+           ,DocCategory
+           ,AssignmentType
+           ,RoleType
+           ,OrderNum
+           ,Assigned
+           ,AccessRight
+           ,AssignedDate
+           ,DeassignedDate
+           ,Creator
+           ,LastUpdated)     
+SELECT ProjectID
+   --   ,ProcessID
+      ,MemberID
+      ,ItemID
+      ,DocCategory
+      ,AssignmentType
+      ,RoleType
+      ,OrderNum
+      ,Assigned
+      ,AccessRight
+      ,AssignedDate
+      ,DeassignedDate
+      ,Creator
+      ,LastUpdated
+  FROM gbpms.XBOLTADM.TB_MY_ITEM
+
+  INSERT INTO XBOLTADM.TB_MENU_ALLOC
+           (Seq
+           ,ArcCode
+           ,ClassCode
+           ,MenuID
+           ,Sort
+           ,MenuDicCode
+           ,ScrURL
+           ,VarFilter
+           ,HideOption)
+     SELECT Seq
+      ,ArcCode
+      ,ClassCode
+      ,MenuID
+      ,Sort
+      ,MenuDicCode
+      ,ScrURL
+      ,VarFilter
+      ,HideOption
+  FROM gbpms.XBOLTADM.TB_MENU_ALLOC
+
+INSERT INTO XBOLTADM.TB_WF_INST_TXT
+           (WFInstanceID
+           ,Subject
+           ,SubjectEN
+           ,Description
+           ,DescriptionEN
+           ,Comment
+           ,CreationTime
+           ,Creator
+           ,LastUser
+           ,LastUpdated)
+
+   SELECT WFInstanceID
+      ,Subject
+      ,SubjectEN
+      ,Description
+      ,DescriptionEN
+      ,Comment
+      ,CreationTime
+      ,Creator
+      ,LastUser
+      ,LastUpdated
+  FROM XBOLTADM.TB_WF_INST_TXT
+
+
+INSERT INTO XBOLTADM.TB_TEAM_ROLE
+           (TeamID
+           ,TeamCode
+           ,ItemID
+           ,RoleManagerID
+           ,TeamRoleCat
+           ,TeamRoleType
+           ,RoleDescription
+           ,Assigned
+           ,AssignedDate
+           ,ChangeSetID
+           ,Status
+           ,Creator
+           ,LastUpdated)
+   SELECT TeamRoleID
+      ,TeamID
+      ,TeamCode
+      ,ItemID
+      ,RoleManagerID
+      ,TeamRoleCat
+      ,TeamRoleType
+      ,RoleDescription
+      ,Assigned
+      ,AssignedDate
+      ,ChangeSetID
+      ,Status
+      ,Creator
+      ,LastUpdated
+  FROM gbpms.XBOLTADM.TB_TEAM_ROLE

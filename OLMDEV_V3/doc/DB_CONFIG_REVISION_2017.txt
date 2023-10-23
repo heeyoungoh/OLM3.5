@@ -1,0 +1,349 @@
+2017/01/02
+
+TB_FLTP.Category Varchar(10) 추가, PJT/CSR/ITM, Def = ITM
+TB_ATTR_TYPE.Category Varchar(10) 추가, ITM/EVAL   , Def = ITM
+
+Procedure INSERT_PROCESS Inner join으로 수정
+
+2017/01/01/16
+
+TB_OLM_DOC_CATEGORY 테이블 추가, TB_FILE 추가, TB_ITEM_FILE , TB_SR_FILE Data--> TB_FILE로 이관
+
+INSERT INTO [HTC_OPR].[XBOLTADM].[TB_FILE]
+           ([Seq] ,[FltpCode] ,[DocCategory] ,[DocumentID],[ItemID] ,[ProjectID] ,[LinkType],[FileName],[FileRealName],[FileSize]
+           ,[FileMgt],[FileFormat],[RegMemberID] ,[CreationTime] ,[LastUpdated] ,[LastUser],[Version] ,[DownCNT] ,[FilePath]
+           ,[LanguageID],[Description] ,[Blocked])
+ SELECT [Seq],[FltpCode] ,'ITM' ,[ItemID] ,ItemID ,[ProjectID],[LinkType],[FileName],[FileRealName],[FileSize],[FileMgt]
+      ,[FileFormat] ,[RegMemberID],[CreationTime],[LastUpdated] ,[LastUser] ,[Version] ,[DownCNT] ,[FilePath] ,[LanguageID]
+      ,[Description] ,[Blocked]
+ FROM [HTC_OPR].[XBOLTADM].[TB_ITEM_FILE]
+
+ ---- 하이닉스 Only -----------------------------------------------------------------------------------
+ UPDATE MPM_OPR.XBOLTADM.TB_FILE
+   SET DocumentID = ITM.FromItemID From XBOLTADM.TB_ITEM ITM  , XBOLTADM.TB_FILE TFL      
+ WHERE ITM.ToItemID = TFL.ItemID and TFL.FltpCode = 'FLTP001' AND ITM.CategoryCode = 'ST1'
+ 
+ --- -한화토탈 Only -----SR 파일 이관 처리-------------------------------------------------------------------------
+ INSERT INTO HTC_OPR.XBOLTADM.TB_FILE
+ (Seq, FltpCode  , DocCategory   ,DocumentID  ,FileName  ,FileRealName ,FileSize ,FileMgt ,FileFormat
+  ,RegMemberID, CreationTime ,LastUpdated ,LastUser ,Version  ,DownCNT ,FilePath ,LanguageID ,Description )       
+ 
+SELECT 
+ (SELECT MAX(Seq) FROM XBOLTADM.TB_FILE)+ Seq, 'SRDOC'  , 'SR'  ,SRID , FileName ,FileRealName  ,FileSize ,FileMgt ,FileFormat
+ ,RegUserID  ,CreationTime  ,LastUpdated ,LastUser ,Version  ,DownCNT ,FilePath ,LanguageID ,Description
+ FROM HTC_OPR.XBOLTADM.TB_SR_FILE
+ --------------------------------------------------------------------------------------------------------------
+ 2017/01/18
+ TB_DICTIONARY.Editable Char(1) 추가
+Alter TABLE HTC_OPR.XBOLTADM.TB_DICTIONARY ADD Editable Char(1) DEFAULT ((1)) NOT NULL 
+
+TB_SR_MST.Proposal Varchar(10) 추가
+Alter TABLE HTC_OPR.XBOLTADM.TB_SR_MST ADD Proposal Varchar(10) DEFAULT ((00))  NULL 
+
+======2017/01/20/ CJ Hanwha Defense 적용완료 ==============
+
+2017/01/25
+
+Alter TABLE MPM_OPR.XBOLTADM.TB_CTS ADD CTSID bigint IDENTITY (1, 1) NOT NULL 
+Alter TABLE MPM_OPR.XBOLTADM.TB_WF_INST ADD DocumentID bigint  NULL 
+Alter TABLE OLM_DEMO.XBOLTADM.TB_ATTR_TYPE ADD Category Varchar(10) DEFAULT ('ITM') NOT NULL 
+
+2017/02/01
+
+TB_TEMPLATE  MYPAGE 템플릿 추가 등록, MN145 등록
+
+2017/02/02
+
+TB_DIC_MASTER    DOCCAT	Document Category 추가 , PROPSSTS 추가  Dic 00/ 01 /02 추가
+
+---> 한화 방산 / CJ 적용 완료 <---
+
+2017/02/03
+
+프로시저 수정 :  ATO_CRTE_MDL, CREATE_BASEMODEL , UPDATE_DEFSYMCODE_TOITEM
+
+---> HTC 적용완료  <-------
+
+2017/02/07
+
+INSERT INTO HTC_OPR.XBOLTADM.TB_ACTP_CONFIG
+           (ActivityID ,Link  ,VarFilter   ,Creator    ,CreationTime   ,LastUpdated   ,LastUser)
+     VALUES  ('ACTP003','procLogDetail.do',	'SR', 1, GETDATE(),	GETDATE(), 1)
+
+2017/02/09
+
+Alter TABLE OLM_DEMO.XBOLTADM.TB_BOARD ADD ClosingDT datetime NULL 추가
+
+----> HTC 적용 <---- 
+
+2017/02/10
+
+TB_ATTR_TYPE_DISPLAY 테이블 추가 , TB_ATTR_ICON 삭제
+Alter TABLE OLM_DEMO.XBOLTADM.TB_ATTR_TYPE_LOV ADD Image varchar(100) NULL 추가
+
+2017/02/14
+
+REPORT RP00033 connectionList.do 추가
+
+2017/02/17
+
+LN00145 업로드 내용 --> '콘텐츠/Content' 수정
+LN00146 업로드 옵션 --> '옵션/Option'로 수정
+LN00147 업로드 언어 --> '언어/Language'로 수정
+
+2017/02/23
+
+Alter TABLE HTC_OPR.XBOLTADM.TB_SR_CAT ADD MailOption Varchar(10) DEFAULT (('01'))  Not NULL 
+
+2017/02/24
+
+Dic master MAILOPTION	Email option 추가
+
+TB_CHANGE_SET.Version  '1.0'으로 업데이트
+
+--> CJ 적용완료  , HWC 적용완료<---------
+
+2017/03/16
+
+TB_MEMBER.Photo nvarchar(200) 추가
+
+2017/03/20
+
+TB_MODEL.ChangeSetID(bigint), TB_ELEMENT.RefLink(bigint), TB_VISIT_LOG.MenuID  Varchar(20) 추가
+TB_CP_MST 테이블 추가, TB_CHANGE_SET.CPID (bigint) 추가
+
+MN148 defTreeView 추가
+
+--> CJ 적용완료  , MD 적용완료 <---------
+
+2017/03/21
+
+MENU147(변경제안), MENU148(defTree), MENU149(RunOracle) 추가
+
+2017/03/22
+
+OLM_DEMO DB에 WF 결제선 관리를 위한 TB_WF_ALLOCATION 테이블 추가
+SB00015 심볼 변경 및 팔레트에 추가함, TB_SYMTYPE_ALLOC 에서 SB00015 제외, SYMTYPE.Category = 'MOJ'
+
+2017/03/24
+
+TFILTER : menuTreeListByALLDIM_treeList 추가
+
+2017/03/30
+
+TB_CHANGE_SET.CompletionDT (datetime) 추가, TB_MY_ITEM.AccessRight Varchar(10), Def = 'R' 추가, 
+DIC_CAT (CNGROLETP) 추가 , Dictionary 값 추가
+Dic LN00293 결재옵션(Approval option)  , LN00294 표준서식(Standard Template) LN00295 사규(Corporate rule) 추가
+TB_FILE.Status Varchar(10) 추가 , DicCat FILESTS File status 추가
+TB_FLTP_ALLOCATION.LinkType Varchar(10) Def = 01 추가 (01 Item에 직접 Link, 02 연결된 Item에 Link, 03 외부 시스템 파일 URL Link
+Config >> Class >> Allocation >> File >> 리스트 >> 상세 화면에 'Link type' 선택 기능 추가필요
+AT00073 약어/Abbrevitation Text 등록
+
+-->  HWC 적용완료 <-----
+
+2017/04/10
+
+Dictionary 'DOCCAT'  Value 추가( CSR, SR, CR, CS, CP),  WFDocTp --> DOCCAT으로 수정
+
+--> CJ, MD , KAIST 적용완료 <-----
+
+2017/04/17
+
+LN00296 시행일  , Enforcement Date 추가
+TB_ITEM.LockChangeSet --> TB_ITEM.CurChageSet으로  수정
+
+--> MD UPDATE_DEFSYMCODE_TOITEM <--
+AttrTypeCode가 AT00037 일때 LovCode 값이 LV37004이면 DefSymCode를 SB00005로 설정 
+
+TB_SYMBOL_TYPE SB00015 Style = ellipse;shape=doubleEllipse;whiteSpace=wrap , Height = 65, Width = 110 으로 수정
+
+LN00297 프로세스 정의서, LN00298 시스템 매뉴얼 추가
+
+--> CJ, HWC, MD 적용완료 <-----
+
+2017/04/27
+
+TB_VISIT_LOG Table에 IP정보를 추가 저장 하기 위해 IpAddress Column 추가
+
+2017/04/28
+TB_MY_POINT , TB_POINT_TYPE 추가, TB_BOARD_SCORE 필드 수정, TB_BOARD_MGT.LikeYN, PointYN 추가
+
+2017/05/11
+RP00034 리포트 신규 등록, CL01004에  할당 , LN00141 : 합의 로 수정
+
+2017/05/18
+TB_BOARD_MGT.PostEmailYN char(1) 추가
+
+--> CJ, HWC, MD 적용 <---
+
+2017/06/19
+
+TB_WF.AgreementYN Char(1) 추가,
+
+ TB_ITEM_CLASS.FileOption  varchar(10) Def = 'N', N/OLM/VIEWER/ExtLink 로 구분함
+ 
+ UPDATE [XBOLTADM].[TB_ITEM_CLASS]  SET [FileOption] = 'OLM'  WHERE HasFile = '1'
+ UPDATE [XBOLTADM].[TB_ITEM_CLASS]  SET [FileOption] = 'N'  WHERE HasFile is null
+ 
+ 2017/06/21
+ 
+ ZMD_PROC_SUM_INSERT에서 L4 PlainText에 줄바꿈 문자 제거 하는 구문 추가 언어별로 적용 필요
+ L4NM.PlainText ==> replace(replace( L4NM.PlainText , char(13),''),char(10),'')
+ 
+ 2017/06/26
+ 
+ TB_FLTP.FileOption Def = OLM  
+ Update TB_ITEM_CLASS.FileOption case when hasFile = 1 then 'OLM' else 'N'
+ Update TB_ITEM_CLASS.FLTP.FileOption = 'OLM'
+ 
+ 2017/07/06
+ 
+ 비밀번호 암호화로 인한 Password 컬럼 길이 증가
+ ALTER TABLE XBOLTADM.TB_MEMBER ALTER COLUMN Password VARCHAR(128)
+ 
+ PWD_ENCODING = Y
+ 
+ 2017/07/12
+ TB_ELEMENT.LastUpdated datetime, LastUser bigint 추가
+ 
+ 2017/07/17
+ 
+password 암호화 : ft8G39nrJykYqJ0Vs5JWvA==   (12345!)
+
+2017/07/18
+
+TB_WF.PostProcessing nvarchar(255) 추가
+
+
+2017/07/24
+
+Mando ERP Link에 사용하는 ZMD_ERP_ROLL Table의 RESPONSIBILITY_NAME Column 크기 varchar(70)으로 변경
+
+2017/07/25
+
+TB_WF.MandatoryGRID bigint, EndGRID bigint 추가
+
+CJ, HTC 적용
+
+2017/08/04
+
+TB_DIM_VALUE.SortNum Int 추가
+
+2017/08/08
+
+TB_WF_STEP.Category --> DocCategory , TransferYN Char(1) 
+TB_WF.AgrSeq char(1) 추가
+
+2017/08/11
+TB_MEMBER.NameEN varchar --> nvarchar로 수정
+
+--> LF 적용
+
+2017/08/24
+
+LN00071 담당자 부서/관리조직 연동 , User's dept. as managing dept. (1033, 2052, 1046, 1057)
+TB_LANGUAGE.ExtCode Varchar(10), 1046/1057 LanguageCode = EN으로 업데이트
+
+--> HWC 적용
+
+217/08/31
+LN00045 주관조직 담당자/Person in charge in managing dept. 로 수정
+
+2017/09/01
+Dictionary Cat= EMAILCODE,  TERMREL, TERMREG  , APRVCLS ,APRVRJT , APRVREF 신규 등록
+TB_OLM_DOC_CATEGORY.AprvMenuID Varchar(10) , CSR의 Approval Request에 연결할 함수명 변수 처리
+
+--> HTC, MANDO 적용
+
+2017/09/08
+TB_WF.MandataryGRID --> MandatoryGRID로 수정 
+
+TB_BOARD_MGT.MgrUserID --> MgtUserID bigint 로 변경, MgtGRID bigint 추가
+TB_ATTR_TYPE.SubAttrTypeCode Varchar(10) 추가
+TB_ATTR_TYPE_ALLOCATION.RowNum(int), ColumnNum(int) 추가
+TB_ATTR_TYPE_LOV.RefLovCode Varchar(10) 추가
+
+DB 함수 fn_GetChangeStatus 수정 , 
+
+dicCat = CNGSTS, TypeCode = CMP (변경완료/Work completed) 추가, TypeCode = CSL --> (승인/Approved) 로 수정
+
+2017/09/15
+
+LN00301 Variant 추가, LN00080 '약어'로 변경,  LN00300 '표준용어'로 변경, 
+AT00073 '약어'로 변경 ,  AT00056 'Contents'로 변경, AT00057 'English name'으로 변경
+DELETE FROM [XBOLTADM].[TB_ITEM_ATTR]  WHERE attrTypeCode = 'AT00057' 실행
+UPDATE [XBOLTADM].[TB_ITEM_CLASS]  SET [FileOption] = 'N' WHERE hasFile is null
+
+Global Val OLM_SERVER_NAME = SFOLM 추가
+
+--> CJ, 한화방산  적용 완료 
+
+2017/10/11
+
+TB_SYMBOL_TYPE 테이블 OLM_DEMO 기준으로 삭제 후 재생성 후 레코드 업데이트
+TB_ATTR_TYPE_DISPLAY 테이블 레코드 업데이트
+(CJ,HTC,HWC, LF, KAIST : CJ_GLOBAL DB 기준으로 업데이트 /MANDO : MANDO DB 기준)
+
+2017/10/19
+TB_ITEM_CLASS.MenuID Varchar(10) 추가
+TB_MODEL_TXT.LastUser, LastUpdated 추가
+
+--> LF 적용
+
+2017/11/15
+MN152 itemPageView 등록
+TB_ATTR_TYPE DataTypeOption varchar(10) 추가, TB_ATTR_TYPE_ALLOCATION AllocationType Varchar(10) 추가
+LN00087 item --> 항목명칭으로 수정함, 
+TB_MENU.Deactivated OLM_DEMO 기준으로 업데이트
+
+2017/11/16
+Global val. GW_LINK_URL , DEF_APPROVAL_SYSTEM, CSR_APPROVAL_PATH  추가 , CAR_APPROVAL_PATH는 사용안함
+TB_MEMBER.DefLanguageID --> 외부에서 SSO 호출 시 언어변수 없을 경우 로그인 언어 값으로 처리 
+
+2017/11/22
+
+fn_Split, fn_GetMemberRoll 함수 추가
+-->MANDO_DEV, OLM_DEMO
+
+2017/11/23
+TB_ARC.UntiledOption 추가 ; 값이 0 일 경우만 Tree에서 명칭이 없을 경우 출력안함(그 외의 경우는 Identifier + Untitled로 표시)
+TB_ATTR_TYPE Calculated Char(1), TX_ATTR_DISPLAY
+fn_GetWFMemberListIndex 추가
+TB_SR_CAT.ProposalOption char(1) 추가
+
+2017/11/27
+TB_ITEM_CLASS.EvaluationClass --> RefClass로 수정
+TB_MODEL_TYPE.MenuID Varchar(10) 추가
+
+2017/12/08
+
+TB_PROJECT.PJCategory Default = 'MST' 로 지정, TB_DICTIONARY Cat= PJTCAT, MST = Master, VAR = Variant, Cat = MC VAR=Variant 값 추가
+TB_ITEM_TYPE Category = 'VAR' , 'IST'인 레코드 추가, TB_ITEM_CLASS ItemTypeCode = 'VAR0001'인 클래스 추가, dictionary OJ/CLS에 값 추가
+TB_MODEL.RefModelID bigint 추가
+
+2017/12/11
+
+TB_ATTR_TYPE_ALLOC.Invisable --> Invisible로 수정
+
+Item Excel procedure 추가
+ - MAIN : TW_ITEM_BATCH
+ - INSERT : TW_INSERT_BATCH, TW_INSERT_ITEM, TW_INSERT_ITEM_ATTR, TW_INSERT_ITEM_CS
+ - UPDATE : TW_UPDATE_BATCH, TW_UPDATE_ITEM, TW_UPDATE_ITEM_ATTR
+ - DELETE : TW_DELETE_BATCH
+ - 함수 : TW_CHECK_DATA, fn_CheckParentID_TWIT, fn_CheckProjectID_TWIT
+
+ 2017/12/15
+ 
+ Model attr display option 처리 테이블 변경
+ TB_ELEMENT.AttrTypeCode Varchar(10) Def.=AT00001 추가, 
+ TB_MODEL_DISPLAY 추가 . 기존  ATTR_TYPE_DISPLAY 대체함 ,  MT00001 레코드 추가
+
+ 
+ 2017/12/20
+ TB_MENU_ALLOC.HideOption char(1) --> If 'Y'읽 경우 호출함수에서  HideOption = Y로 날릴 경우 해당 탭을 표시 안함
+ 
+ --> SEMES 적용
+ 
+ 2017/12/28
+ LN00112 직무/Job으로 수정 , MN00155 등록
+ 

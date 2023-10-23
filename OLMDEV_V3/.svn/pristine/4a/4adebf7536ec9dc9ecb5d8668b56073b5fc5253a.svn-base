@@ -1,0 +1,28 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+html, body { height:100%; width:100%; margin:0px; padding:0px; font-family:nanum-barun-gothic-regular,나눔고딕,NanumGothic, 맑은 고딕, Malgun Gothic, dotum,'돋움',Apple SDGothic Neo,Apple-Gothic,sans-serif; font-size:13px;}
+.overlap { width:100%; height:100%; background-color:#f0f0f0; }
+.overlap_wrap { position:absolute; left:50%; top:50%; margin-left:-311px; margin-top:-252px;  width:623px; height:505px; background-color:#fff; display:block;}
+.overlap_tit { text-align:center;}
+.tit_01 { font-weight:bold; font-size:20px; margin:40px 0px 0px 0px; padding:0px;}
+.point_color { color:#da2128;}
+.tit_02 { font-size:16px; margin:12px 0px 0px 0px; padding:0px;}
+.overlap_btn_wrap { text-align:center; margin-top:30px;}
+.overlap_btn_box { width:377px; display:inline-block; height:45px;}
+.overlap_btn01 { margin-right:-4px;display:inline-block; width:188px; height:45px; border-radius: 5px 0px 0px 5px; background-color:#da2128; text-align:center; font-weight:bold; font-size:18px; line-height:45px; text-decoration:none; color:#fff;}
+.overlap_btn03 { margin-right:-4px;display:inline-block; width:188px; height:45px; border-radius: 5px 5px 5px 5px; background-color:#da2128; text-align:center; font-weight:bold; font-size:18px; line-height:45px; text-decoration:none; color:#fff;}
+.overlap_btn02 { display:inline-block; width:188px; height:45px; border-radius: 0px 5px 5px 0px; background-color:#4d585d; text-align:center; font-weight:bold; font-size:18px; line-height:45px; text-decoration:none; color:#fff;}
+.overlap_con_wrap { margin-top:47px; background-color:#7b8489; width:100%; height:289px;}
+.overlap_con_box {padding:30px; }
+.overlap_con_tit { border-bottom:1px solid #b5b8ba; height:50px;}
+.overlap_con_txt01 { color:#fff; font-weight:bold; font-size:18px; margin-left:60px; line-height:30px;}
+.overlap_con_tit { background:url(/images/images/NxCommon/overlap_ico.png) no-repeat 0px 0px;}
+.overlap_con_txt02 { color:#fff; margin-top:20px; line-height:20px;}
+.overlap_con_txt03 { color:#d2d5d6; margin-top:10px; line-height:18px; font-size:12px;}
+.con_point { font-weight:bold; color:#f0c19b;}
+.overlap_con_txt04 { color:#fff;}
+.con_dd01 { font-weight:bold; margin-bottom:10px; padding-top:5px;}
+.con_dt {background:url(/images/images/NxCommon/overlap_ico.png) no-repeat 3px -78px; font-weight:bold;  font-size:14px;  width:147px; margin-right:20px; text-align:center; height:70px;  float:left;}
+.con_dt span { margin-left:-3px; display:inline-block; margin-top:23px; }

@@ -1,0 +1,55 @@
+/* SR이관 SRTRP  its SR접수알림 SRREQ */
+.SRheadline {font-size: 27px; float:right;text-align:right;margin-top:12px;font-weight: 500;font-family: Apple SD Gothic Neo, sans-serif; padding:0 25px;}
+.SRline {BACKGROUND-COLOR: #29aeff; background-image: linear-gradient(to left, #072f87 , #29aeff);height: 5px; font-size: 1px;}
+.SRtab {width:100%; padding: 0 60px; font-family:Apple SD Gothic Neo, sans-serif;}
+.SRtitle {border-bottom:1px solid #d4d4d4; HEIGHT:30px; font-weight:bold; font-size: 18px; padding: 30px 10px 10px 10px;}
+.SRlist {width:13%; padding:15px 0 1px 0; color:#696969;line-height:23px;vertical-align:top;}
+.SRlist2 {width:20%; padding:15px 0 1px 0; color:#000;line-height:23px;vertical-align:top;}
+.SRlist3 {width:13%; padding-bottom:15px; color:#696969;line-height:23px;vertical-align:top;}
+.SRlist4 {width:20%; padding-bottom:15px; color:#000;line-height:23px;vertical-align:top;}
+.SRmain {padding:20px 25px;  font-size: 14px; background-color: #F5F9FC; line-height:22px;}
+.SRmove {FONT-SIZE: 16px; TEXT-DECORATION: none;  HEIGHT: 44px; WIDTH: 335px; FONT-WEIGHT: 500; COLOR: #fff; DISPLAY: inline-block; LINE-HEIGHT: 44px; BACKGROUND-COLOR: #29aeff; border-radius: 2px; cursor:pointer;}
+.SRunderline {height: 10px; border-top: 1px solid #d4d4d4;}
+
+
+/* 스케줄 SCHDLALM */
+.SCHheadline {font-size: 27px; float:right; text-align:right;margin-top:12px;font-weight: 500;font-family: Apple SD Gothic Neo, sans-serif; padding:0 25px;}
+.SCHline {BACKGROUND-COLOR: #29aeff; background-image: linear-gradient(to left, #072f87 , #29aeff); height:5px;  font-size:2px;}
+.SCHtab {width:100%; padding: 0 60px; font-family:Apple SD Gothic Neo, sans-serif;}
+.SCHtitle {width:13%; padding:15px 0 5px 10px; color:#696969;line-height:23px;vertical-align:top;font-weight: 600;}
+.SCHlist {width:13%; padding:15px 0 5px 10px; color:#696969;line-height:23px;vertical-align:top;font-weight: 600;}
+.SCHlist2 {width:20%; padding:15px 0 5px 10px;color:#000;line-height:23px;vertical-align:top;font-weight: 600;}
+.SCHlist3 {width:13%; padding: 0 0 10px 10px ; color:#696969;line-height:23px;vertical-align:top;font-weight: 600;}
+.SCHlist4 {width:20%; padding:0 0 10px 10px; color:#000;line-height:23px;vertical-align:top;font-weight: 600;}
+.SCHlist5 {width:13%; padding: 0 0 15px 10px; color:#696969;line-height:23px;vertical-align:top;}
+.SCHlist6 {padding: 0 0 15px 10px; color:#000;line-height:23px;vertical-align:top;}
+.SCHmain {font-size: 14px;padding:20px 25px; background-color: #F5F9FC;  line-height:22px; }
+.SCHmove {FONT-SIZE: 16px; TEXT-DECORATION: none; HEIGHT: 44px; WIDTH: 335px; FONT-WEIGHT: 500; COLOR: #fff;  DISPLAY: inline-block; LINE-HEIGHT: 44px; BACKGROUND-COLOR: #29aeff; border-radius: 2px; cursor:pointer;}
+.SCHunderline {height: 10px; border-top: 1px solid #d4d4d4;}
+
+
+
+
+/* ITS 서비스 승인요청 SRAPREQ*/
+.SRAPline {BACKGROUND-COLOR: #29aeff; background-image: linear-gradient(to left, #072f87 , #29aeff); height:5px;  font-size:1px;}
+.SRAPtab {width:100%; font-family:Apple SD Gothic Neo, sans-serif;border-collapse: collapse;}
+.SRAPtitle {border-bottom:1px solid #727272; HEIGHT:40px; font-weight:bold; font-size: 18px; padding: 30px 10px 10px 10px;}
+.SRAPlist {background-color:#F6F8F9; border:1px solid #d4d4d4; width:13%; padding:10px; color:#696969;line-height:23px;vertical-align:top;}
+.SRAPlist2 {border:1px solid #d4d4d4; width:20%; padding:10px; color:#000;line-height:23px;vertical-align:top;}
+.SRAPlist3 {width:13%; padding:10px; color:#696969; line-height:23px; vertical-align:top; FONT-WEIGHT: 600;}
+.SRAPlist4 {width:45%; padding:10px; color:#000;line-height:23px;vertical-align:top; FONT-WEIGHT: 600;}
+.SRAPlist5 {background-color:#F6F8F9; border:1px solid #d4d4d4; width:13%;padding:10px; color:#696969;line-height:23px;vertical-align:top;}
+.SRAPlist6 {border:1px solid #d4d4d4; width:20%; padding:10px; color:#000;line-height:23px;vertical-align:top;}
+.SRAPlist7 {border:1px solid #d4d4d4; width:20%; padding:10px; color:#000;line-height:23px;vertical-align:top;}
+.SRAPlist8 {background-color:#F6F8F9; border:1px solid #d4d4d4; width:13%; padding:10px; color:#696969;line-height:23px;vertical-align:top;}
+.SRAPlist9 {border:1px solid #d4d4d4; width:20%; padding:10px; color:#000;line-height:23px;vertical-align:top;}
+.SRAPlist10 {border:1px solid #d4d4d4; width:20%; padding:10px; color:#000;line-height:23px;vertical-align:top;}
+
+.SRAPmain {padding: 25px; font-size: 14px;background-color: #F5F9FC;}
+.SRAPsubline { border-top:1px solid #727272; HEIGHT:7px; font-weight:bold; font-size: 2px;}
+.SRAPsubline2 { HEIGHT:7px; font-weight:bold; font-size: 2px;}
+.SRAPappr {FONT-SIZE: 16px;  TEXT-DECORATION: none; HEIGHT: 43px; WIDTH: 155px; FONT-WEIGHT: 600; COLOR: #ffffff; 
+    DISPLAY: inline-block; LINE-HEIGHT: 44px; BACKGROUND-COLOR: #29aeff; padding: 2px; border-radius: 2px; cursor:pointer; margin: 0 15px;}
+.SRAPret {FONT-SIZE: 16px; TEXT-DECORATION: none; HEIGHT: 43px; WIDTH: 155px; FONT-WEIGHT: 600; COLOR: #29aeff; 
+    DISPLAY: inline-block; LINE-HEIGHT: 44px; border: 2px solid #29aeff; border-radius: 2px; cursor:pointer;}
+

@@ -1,0 +1,92 @@
+div.gridbox_dhx_sch .xhdr{
+	background-color:#aaa;	
+	border-left: 1px solid #b4c4d6;
+	border-right: 1px solid #b4c4d6;
+	border-bottom: 1px solid #b4c4d6;
+	border-top: 1px solid #b4c4d6;
+}
+div.gridbox_dhx_sch table.hdr tr{
+	background-color:#eefbfe;	
+}
+
+div.gridbox_dhx_sch table.obj tr td{
+	font-family:Malgun Gothic;
+	font-size:12px;
+	border-left: 0px solid #d8ecef;
+	border-right: 0px solid #d8ecef;
+	border-bottom: 1px solid #d8ecef;
+	border-top: 0px solid #d8ecef;
+	color:#555;
+	padding-right:4px;
+	padding-left:4px;
+}
+div.gridbox_dhx_sch table.hdr td div.hdrcell{
+	width:auto;
+	padding-left:10px;
+	width:100% !ie;
+}
+div.gridbox_dhx_sch table.hdr td {
+	/*border: 1px solid #b4c4d6;
+	border-left: 0px solid #b4c4d6;
+	border-right: 0px solid #b4c4d6;
+	border-bottom: 1px solid #b4c4d6;
+	border-top: 1px solid #b4c4d6;*/
+	border: 0px solid #b4c4d6;
+	padding-top:3px;
+	padding-bottom:3px;
+	background-color:#e6effa;
+	font-family:Malgun Gothic;
+	font-size:12px;
+	color:#235c9e;
+	font-weight:bold;
+	vertical-align:top;
+	text-align:left;
+}
+
+
+div.gridbox_dhx_sch {
+	border-bottom:0px solid #3288C4;
+}
+div.gridbox table.obj tr td{
+	padding-top:2px;
+	padding-bottom:2px;
+}
+div.gridbox table.obj.row20px tr td{
+	padding-left:20px;
+	padding-right:2px;
+}
+
+div.gridbox table.obj tr td.editable{
+  padding:0px;
+}
+div.gridbox table.obj tr td.editable div.treegrid_cell{
+	padding-left:4px;
+	padding-top:1px;
+}
+div.gridbox_dhx_sch table.obj tr.rowselected{
+	background-color:#eefbfe;
+}
+div.gridbox_dhx_sch table.obj tr.rowselected td{
+	background-color:#eefbfe;
+}
+div.gridbox_dhx_sch table.obj.row20px tr.rowselected td{
+	background-color:#e6fdfe;
+	color:#05496d;font-weight:bold;
+}
+div.gridbox_dhx_sch table.obj tr.rowselected td.cellselected {
+	background-color:#eefbfe;
+}
+div.gridbox_dhx_sch .odd_dhx_sch{
+	background-color:#eefbfe;
+}
+
+.dhx_combo_select, .gridbox_dhx_sch .dhx_combo_edit, .gridbox_dhx_sch .dhx_textarea{
+	font-family:Malgun Gothic;
+	font-size:12px;
+}
+.gridbox_dhx_sch .dhx_combo_edit{
+	padding:1px 0px 1px 1px;
+}
+.gridbox_dhx_sch .dhx_sub_row {
+	background-color:transparent;
+}

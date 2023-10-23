@@ -1,0 +1,510 @@
+-- START :: DBCFG.20190822.048
+
+UPDATE XBOLTADM.TB_REPORT SET ReportURL= 'compareModelList.do' WHERE ReportCode='RP00010'
+--INSERT XBOLTADM.TB_MENU (MenuID, MenuCat, MenuType, DicCode, URL, VarFilter, MNLVL, Icon, Deactivated, SortNum, ItemID) VALUES (N'MN050', N'CLS  ', NULL, N'LN00089', N'compareModel', NULL, N'U    ', N'icon_board.png', N'0', NULL, NULL)
+
+Alter Table XBOLTADM.TB_WF ADD WfPathSQLID varchar(255) Null
+Alter Table XBOLTADM.TB_WF ADD EmailCode Varchar(10) Null
+Alter Table XBOLTADM.TB_WF_ALLOCATION ADD WFAllocID Bigint IDENTITY (1, 1)
+Alter Table XBOLTADM.TB_WF_ALLOCATION ADD DocSubClass Varchar(10) NULL
+
+Alter Table XBOLTADM.TB_CONFIGURATION ADD CfgMenuType Varchar(10) Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD AccUserLvl int Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD VarFilter Varchar(1000) Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD Icon Varchar(50) Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD CreationTime dateTime Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD LastUpdated dateTime Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD Creator bigint Null
+Alter Table XBOLTADM.TB_CONFIGURATION ADD LastUser bigint Null
+
+Alter Table XBOLTADM.TB_Element ADD EAT001 nvarchar(max) Null
+Alter Table XBOLTADM.TB_Element ADD EAT002 nvarchar(max) Null
+Alter Table XBOLTADM.TB_Element ADD EAT003 nvarchar(max) Null
+Alter Table XBOLTADM.TB_Element ADD EAT004 nvarchar(max) Null
+Alter Table XBOLTADM.TB_Element ADD EAT005 nvarchar(max) Null
+
+Insert Into XBOLTADM.TB_ATTR_TYPE ( AttrTypeCode,Category,DataType,Domain,UOM,DecimalPlace,Editable,Customizable,Calculated,HTML,IsComLang,AttrTypeGRCode
+      ,SubAttrTypeCode,Creator,LatUser,CreationTime,LastUpdated,ArisTypeNum,GlobalID,ClientID)
+SELECT AttrTypeCode,Category,DataType,Domain,UOM,DecimalPlace,Editable,Customizable,Calculated,HTML,IsComLang,AttrTypeGRCode
+      ,SubAttrTypeCode,Creator,LatUser,CreationTime,LastUpdated,ArisTypeNum,GlobalID,ClientID FROM OLM_MASTER.XBOLTADM.TB_ATTR_TYPE
+  Where AttrTypeCode IN ('EAT001','EAT002','EAT003','EAT004','EAT005')
+  
+
+Delete From XBOLTADM.TB_CONFIGURATION 
+
+Insert Into XBOLTADM.TB_CONFIGURATION (ConfigurationCode,ParentID,Level,OrderNum,MenuID,CfgMenuType,AccUserLvl,VarFilter,Icon,CreationTime,LastUpdated,Creator,LastUser)
+Select ConfigurationCode,ParentID,Level,OrderNum,MenuID,CfgMenuType,AccUserLvl,VarFilter,Icon,CreationTime,LastUpdated,Creator,LastUser From OLM_MASTER.XBOLTADM.TB_CONFIGURATION
+
+Delete From XBOLTADM.TB_DICTIONARY Where Category = 'CFG' 
+Insert Into XBOLTADM.TB_DICTIONARY (TypeCode, LanguageID, Category, Name, Description, SortNum, VarFilter, Editable, ClientID) 
+Select TypeCode, LanguageID, Category, Name, Description, SortNum, VarFilter, Editable, ClientID From OLM_MASTER.XBOLTADM.TB_DICTIONARY Where Category = 'CFG'
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Insert Into XBOLTADM.TB_EMAIL_FORM (EmailCode, LanguageID, HTMLForm, ClientID)
+Select EmailCode, LanguageID, HTMLForm, ClientID From OLM_MASTER.XBOLTADM.TB_EMAIL_FORM
+
+  
+Insert Into XBOLTADM.TB_REPORT(ReportCode,ReportType,OutputType,Icon,Authority,IsPublic,ReportURL,ActionType,PWidth,PHeight,Deactivated,Creator,CreationTime,LastUpdated)
+Select ReportCode,ReportType,OutputType,Icon,Authority,IsPublic,ReportURL,ActionType,PWidth,PHeight,Deactivated,Creator,GetDate(),GetDate() From OLM_MASTER.XBOLTADM.TB_REPORT 
+Where ReportCode = 'RP00046'
+
+Insert Into XBOLTADM.TB_REPORT_ALLOCATION (ReportCode, ClassCode, ProjectID, TemplCode, VarFilter, SortNum)
+Select ReportCode, ClassCode, ProjectID, TemplCode, VarFilter, SortNum From OLM_MASTER.XBOLTADM.TB_REPORT_ALLOCATION
+Where ReportCode = 'RP00046'
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPDATE XBOLTADM.TB_ITEM_TYPE   SET  Icon = 'img_rule.png'  WHERE itemtypeCode = 'OJ00007'
+UPDATE XBOLTADM.TB_ITEM_TYPE   SET  Icon = 'img_doc_standard.png'  WHERE itemtypeCode = 'OJ00011'
+UPDATE XBOLTADM.TB_ITEM_TYPE   SET  Icon = 'img_book.png'  WHERE itemtypeCode = 'OJ00012'
+UPDATE XBOLTADM.TB_ITEM_TYPE   SET  Icon = 'img_product.png'  WHERE itemtypeCode = 'OJ00015'
+UPDATE XBOLTADM.TB_ITEM_TYPE   SET  Icon = 'img_doc_tech.png'  WHERE itemtypeCode = 'OJ00016'
+						
+UPDATE XBOLTADM.TB_ITEM_CLASS   SET Level = 1
+						WHERE ItemClassCode in ('CL02001', 'CL03001', 'CL06001' , 'CL11001', 'CL12001', 'CL14001' , 'CL15001')
+UPDATE XBOLTADM.TB_ITEM_CLASS   SET  Icon = 'img_rule.png'  WHERE itemtypeCode = 'OJ00007'
+UPDATE XBOLTADM.TB_ITEM_CLASS   SET  Icon = 'img_doc_standard.png'  WHERE itemtypeCode = 'OJ00011'
+UPDATE XBOLTADM.TB_ITEM_CLASS   SET  Icon = 'img_book.png'  WHERE itemtypeCode = 'OJ00012'
+UPDATE XBOLTADM.TB_ITEM_CLASS   SET  Icon = 'img_product.png'  WHERE itemtypeCode = 'OJ00015'
+UPDATE XBOLTADM.TB_ITEM_CLASS   SET  Icon = 'img_doc_tech.png'  WHERE itemtypeCode = 'OJ00016'
+
+Update XBOLTADM.TB_MENU SET URL = 'viewArcDefPage.do' Where MenuID = 'MN030'
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+  Insert Into XBOLTADM.TB_OLM_ROLE_TYPE (RoleTypeCode,AssignmentType,ProcessType,Deactivated,CreationTime,Creator,LastUpdated,LastUser,ClientID,ActorType)  
+  Select RoleTypeCode,AssignmentType,ProcessType,Deactivated,CreationTime,Creator,LastUpdated,LastUser,ClientID,ActorType From OLM_MASTER.XBOLTADM.TB_OLM_ROLE_TYPE Where AssignmentType = 'CTSROLETP'
+
+  Alter Table XBOLTADM.TB_BOARD ADD SRID bigint
+
+  Alter Table XBOLTADM.TB_WF_INST ADD CreatorTeamID BIGINT
+
+
+  UPDATE XBOLTADM.TB_WF_INST SET CreatorTeamID = WSI.ActorTeamID
+   						From XBOLTADM.TB_WF_STEP_INST WSI, XBOLTADM.TB_WF_INST WI WHERE WSI.WFInstanceID = WI.WFInstanceID and WSI.WFStepID = 'AREQ'
+
+Alter Table XBOLTADM.TB_MEMBER ADD DefAccMode varchar(10)
+
+Alter Table XBOLTADM.TB_OLM_DOC_CATEGORY ADD WFAprURL varchar(200)
+Alter Table XBOLTADM.TB_SYMBOL_TYPE ADD DefLovCode varchar(10)
+Alter Table XBOLTADM.TB_SYMBOL_TYPE ADD DefFontColor varchar(7)
+Alter Table XBOLTADM.TB_SYMBOL_TYPE ADD DefFontFamily varchar(50)
+Alter Table XBOLTADM.TB_SYMBOL_TYPE ADD DefFontStyle varchar(7)
+Alter Table XBOLTADM.TB_SYMBOL_TYPE ADD DefFontSize int
+
+Alter Table XBOLTADM.TB_SYMTYPE_ALLOCATION ADD SortNum int null
+Alter Table XBOLTADM.TB_SYMTYPE_ALLOCATION ADD creator bigint null
+Alter Table XBOLTADM.TB_SYMTYPE_ALLOCATION ADD creationTime date null
+
+Alter Table XBOLTADM.TB_SCHEDULER ADD StartAlarm varchar(50) null
+Alter Table XBOLTADM.TB_SCHEDULER ADD EndAlarm varchar(50) null
+Alter Table XBOLTADM.TB_SCHEDULER ADD AlarmOption varchar(50) null
+Alter Table XBOLTADM.TB_SCHEDULER ADD DisclScope varchar(10) null Default 'PUB'
+Alter Table XBOLTADM.TB_SCHEDULER ADD DocCategory varchar(10) null
+Alter Table XBOLTADM.TB_SCHEDULER ADD DocumentID bigint null
+
+Alter Table XBOLTADM.TB_MENU ADD CreationTime dateTime null
+Alter Table XBOLTADM.TB_MENU ADD Creator bigint null
+Alter Table XBOLTADM.TB_MENU ADD LastUser bigint null
+Alter Table XBOLTADM.TB_MENU ADD LastUpdated dateTime null
+
+Alter Table XBOLTADM.TB_Item_Type ADD DefColor varchar(7) null
+Alter Table XBOLTADM.TB_Item_Type ADD DefSRType varchar(10) null
+Alter Table XBOLTADM.TB_MODEL_Type ADD InfoTabURL varchar(100) null
+Alter Table XBOLTADM.TB_ITEM_CLASS ADD InfoTabURL varchar(100) null
+Alter Table XBOLTADM.TB_ITEM_CLASS ADD DefCSRID bigint null
+Alter Table XBOLTADM.TB_ITEM_CLASS ADD MgtTeamID bigint null
+
+Alter Table XBOLTADM.TB_ITEM ADD ReleaseNo bigInt not null default 0
+Alter Table XBOLTADM.TB_ITEM ADD ParentID bigInt null
+Alter Table XBOLTADM.TB_ITEM ADD RefClientID Varchar(10)
+Alter Table XBOLTADM.TB_ITEM ADD RefCItemID BIGINT
+Alter Table XBOLTADM.TB_ITEM ADD RefClientID Varchar(10)
+
+--Alter Table XBOLTADM.TB_ITEM alter column SortNum default 0
+--Alter Table XBOLTADM.TB_ITEM Alter Column Status default 'NEW1'
+
+Alter Table XBOLTADM.TB_ITEM_Type ADD DefSRType varchar(10) null
+Alter Table XBOLTADM.TB_ITEM_DIM ADD Description nvarchar(max) null
+Alter Table XBOLTADM.TB_ITEM_DIM ADD Reason nvarchar(1000) null
+Alter Table XBOLTADM.TB_TFILTER ADD StrType char(1) null default 1
+Alter Table XBOLTADM.TB_VISIT_LOG ADD InstanceNo varchar(20) null
+
+Alter Table XBOLTADM.TB_TEAM_ROLE ADD ChangeSetID Bigint
+Alter Table XBOLTADM.TB_PROJECT ADD MenuID Varchar(10)
+Alter Table XBOLTADM.TB_WF_INST ADD WFAllocID bigint
+Alter Table XBOLTADM.TB_Change_SET ADD SRID bigint null
+
+Alter Table XBOLTADM.TB_MODEL ADD RefCModelID BIGINT
+Alter Table XBOLTADM.TB_MODEL Add RefModelID bigint null
+Alter Table XBOLTADM.TB_MODEL_DISPLAY Add MDPID bigint null
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--ALTER TABLE XBOLTADM.TB_MODEL_DISPLAY ADD CONSTRAINT MDPID PRIMARY KEY CLUSTERED 
+--(
+--	MDPID ASC
+--)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON PRIMARY
+
+--ALTER TABLE XBOLTADM.TB_MODEL_DISPLAY ADD  CONSTRAINT DF_TB_MODELE_DISPLAY_Category  DEFAULT ('ELM') FOR Category
+--ALTER TABLE XBOLTADM.TB_MODEL_DISPLAY ADD  CONSTRAINT DF_TB_MODEL_DISPLAY_ScrnMode  DEFAULT ('V') FOR ScrnMode
+
+update XBOLTADM.TB_MENU SET MenuCat='TMPL ', URL= 'olmMainHomeV34', VarFilter='&srType=ITSP' where MenuID = 'MN040'
+update XBOLTADM.TB_MENU SET MenuCat='BASE ', URL= 'ispMgt', VarFilter='&srType=ISP&scrnType=srRqst' where MenuID = 'MN041'
+update XBOLTADM.TB_MENU SET MenuCat='TMPL ', URL= 'myITS', VarFilter='&srType=ITSP' where MenuID = 'MN042'
+update XBOLTADM.TB_MENU SET MenuCat='TMPL ', URL= 'mySpaceV34', VarFilter='&srType=ISP&multiComp=Y' where MenuID = 'MN043'
+Update XBOLTADM.TB_MENU SET URL =  'cxnItemTreeMgt' where MenuID = 'MN055'
+Update XBOLTADM.TB_MENU SET URL =  'variantTreeMgt' where MenuID = 'PIM001'
+
+update XBOLTADM.TB_Menu Set URL = 'myPage',VarFilter = '&url=/hom/main/v33/myPageA' where menuID= 'MN145'
+
+
+Insert Into XBOLTADM.TB_ITEM_CLASS (
+		ItemClassCode,ItemTypeCode,Level,Icon,ChangeMgt,HasCoP,HasFile,FileOption,ExtFunc,AutoID,DefVersionIncr,Deactivated,Creator
+      ,CreationTime,LastUser,LastUpdated,ClientID
+  ) values ('CL14004', 'OJ00014', 0, 'img_sitemap.png',0,0,0,'N',0,'N','0.1',0,1,Getdate(),1,getDate(),1)
+
+
+Insert Into XBOLTADM.TB_ITEM_CLASS ( ItemClassCode,ItemTypeCode,Level,Icon,ChangeMgt,HasCoP,HasDimension,HasFile,FileOption
+      ,ExtFunc,AutoID,MenuID,VarFilter,CheckOutOption,CheckInOption,DefVersionIncr,Deactivated,Creator,CreationTime,LastUser,LastUpdated,ClientID
+	  ) Values(
+	  'CLX0001','OJ0000X',1,'img_sitemap.png',0,0,0,0,'N',0,'N','MN045','&ownerType=author','1','01','0.1','0',1,Getdate(),1,getDate(),1 )
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+--Alter Table XBOLTAPP.PIM_PROC_INST ADD IFMessage varchar(50)
+--Alter Table XBOLTAPP.ESM_EVAL_ITEM ADD EVRoundID bigint
+
+--Alter Table XBOLTAPP.PIM_ELM_INST ADD ElmModelID bigint
+
+UPDATE XBOLTADM.TB_REPORT SET ReportType = 'CLS' Where ReportType = 'ITM'
+
+--ALTER TABLE TB_MEMBER_AGENT ALTER COLUMN Seq IDENTITY (1,1) for Seq
+​
+update XBOLTADM.TB_DICTIONARY SET Name = '워크스페이스' WHERE TYPECODE='LN00277' AND LANGUAGEID = 1042
+update XBOLTADM.TB_DICTIONARY SET Name = 'Work Space' WHERE TYPECODE='LN00277' AND LANGUAGEID = 1033
+
+INSERT XBOLTADM.TB_MENU (MenuID, MenuCat, MenuType, DicCode, URL, VarFilter, MNLVL, Icon, Deactivated, SortNum, ItemID) VALUES (N'MN101', N'CLS  ', NULL, NULL, N'viewTermDetail', NULL, N'2    ', N'icon_board.png', N'0', NULL, NULL)
+INSERT XBOLTADM.TB_MENU (MenuID, MenuCat, MenuType, DicCode, URL, VarFilter, MNLVL, Icon, Deactivated, SortNum, ItemID) VALUES (N'MN102', N'CLS  ', NULL, N'LN00057', N'diagramList', NULL, N'2    ', N'icon_board.png', N'0', NULL, NULL)
+
+EXEC SP_RENAME 'XBOLTADM.TB_ITEM.AccessOption', 'AccCtrl', 'COLUMN'
+
+Alter Table XBOLTADM.TB_PROJECT ADD ItemAccCtrl Char(1)
+
+--DBCFG.20210720.007
+--Alter Table XBOLTAPP.ESM_SR_MBR ADD MbrTeamID bigint
+Alter Table XBOLTADM.TB_MY_SCHEDULE ADD MbrTeamID bigint
+Alter Table XBOLTADM.TB_ITEM ADD ItemMenuID Varchar(10)
+Alter Table XBOLTADM.TB_ITEM ADD ItemVarFilter Varchar(255)null
+Alter Table XBOLTADM.TB_ITEM ADD RefIdentifier nvarchar(100) null
+
+
+--DBCFG.20210817.008
+Alter Table XBOLTADM.TB_PJT_MEMBER_REL ADD MbrTeamID Bigint
+--Alter Table XBOLTAPP.ESM_PROC_CONFIG ADD PRCCFGID varchar(10)
+Alter Table XBOLTADM.TB_PROC_LOG_CONFIG ADD PLOGCFGID varchar(10)
+
+--DBCFG.20210903
+UPDATE XBOLTADM.TB_SYMTYPE_ALLOCATION  SET ItemCategoryCode = NULL, ItemTypeCode = NULL, ClassCode = NULL WHERE ItemCategoryCode IN ('MOJ', 'OJ')
+DELETE FROM XBOLTADM.TB_ITEM  WHERE  CategoryCode = 'MOJ' and FromItemID != 0 and ToItemID != 0
+Alter Table XBOLTADM.TB_WF_INST ADD DocumentNo varchar(20)
+
+--DBCFG.20211005
+Alter Table XBOLTADM.TB_SYMTYPE_ALLOCATION ADD MdlIF char(1)
+UPDATE XBOLTADM.TB_SYMTYPE_ALLOCATION   SET MdlIF = 'Y' WHERE SymTypeCode = 'SB00004' and ModelTypeCode = 'MT001'
+Alter Table XBOLTADM.TB_TEAM_ROLE ADD RoleDescription nvarchar(2000)
+
+--DBCFG.20211208
+
+UPDATE XBOLTADM.TB_TEAM_ROLE SET ChangeSetID = TI.CurChangeSet  From XBOLTADM.TB_ITEM TI Where TI.ItemID = XBOLTADM.TB_TEAM_ROLE.ItemID
+
+insert into XBOLTADM.TB_DIC_MASTER (DicCategory, SysDomain, Name, Descriptioin) values('TMRSTS','OLM','Team Role Status','');
+
+--DBCFG.20220104
+UPDATE XBOLTADM.TB_WF_INST SET WFAllocID =  TWA.WFAllocID From XBOLTADM.TB_WF_ALLOCATION TWA Where TWA.DocCategoryCode = XBOLTADM.TB_WF_INST.DocCategory
+
+Delete XBOLTADM.TB_CONFIGURATION Where ConfigurationCode = 'CFG1400'
+UPDATE XBOLTADM.TB_TEAM_ROLE SET Assigned = 2 WHERE Assigned =1
+
+Insert Into XBOLTADM.TB_DIC_MASTER (DicCategory,SysDomain,Name) Values('CTSROLETP','ESM','CTS Role Type')
+Insert Into XBOLTADM.TB_DICTIONARY (TypeCode,LanguageID,Category,Name,SortNum,Editable) 
+Select TypeCode,LanguageID,Category,Name,SortNum,Editable From OLM_MASTER.XBOLTADM.TB_DICTIONARY Where TypeCode = 'CTSROLETP'
+
+DBCFG.20220104.001 TB_WF_ALLOC 테이블 삭제 후 신규 생성, 레코드  OLM_MASTER 기준으로 업데이트 (신규 구축 사이트, Mando,HEC,KDNVN,LF) 
+
+
+Alter Table XBOLTADM.TB_SCHEDULER ADD DocNo Varchar(20) null
+
+
+DBCFG.20220405.001 File blocked Update 
+-----------------------------------------------------------------------------------------------------------------------------
+ UPDATE XBOLTADM.TB_FILE  SET Blocked = 2 WHERE Blocked = 1 AND DocCategory = 'ITM'  --> Update all file record blocked = 2
+
+-- Item CurChangeSetID = File.ChangeSeID             ->   제/개정 중인  File =  1
+update XBOLTADM.TB_FILE Set	Blocked = '1'
+Where Seq IN (
+		select TF.Seq From XBOLTADM.TB_FILE TF
+		INNER JOIN XBOLTADM.TB_Item TI ON TI.ItemID = TF.DocumentID And DocCategory = 'ITM'
+		Where  TI.CurChangeSet = TF.ChangeSetID -- 1		
+	)
+And FltpCode IN (select FltpCode From XBOLTADM.TB_FLTP Where RevisionYN = 'Y')
+And DocCategory = 'ITM'
+​​
+-- Item ReleaseNo = File.ChangeSetID ->  개정 승인 완료된    File = 0
+update XBOLTADM.TB_FILE Set
+	Blocked = '0'
+Where Seq IN(
+	select TF.Seq From XBOLTADM.TB_FILE TF
+	INNER JOIN XBOLTADM.TB_Item TI ON TI.ItemID = TF.DocumentID
+	Where  TI.ReleaseNo = TF.ChangeSetID -- 0
+)
+And FltpCode IN (select FltpCode From XBOLTADM.TB_FLTP Where RevisionYN = 'Y')
+And DocCategory = 'ITM'
+​
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+-- DB INSERT 
+INSERT INTO XBOLTADM.TB_WF_ALLOCATION	
+     ( WFID
+           ,WFDocType
+           ,DocCategoryCode
+           ,DocSubClass
+           ,VarFilter
+           ,PreCheck
+           ,PostProcessing
+           ,RelVarFilter
+           ,RjtVarFilter
+           ,Description
+           ,EmailCode
+           ,Deactivated
+           ,CreationTime
+           ,Creator
+           ,LastUpdate
+           ,LastUser
+           ,MenuID )	
+select	
+	WFID
+           ,WFDocType
+           ,DocCategoryCode
+           ,DocSubClass
+           ,VarFilter
+           ,PreCheck
+           ,PostProcessing
+           ,RelVarFilter
+           ,RjtVarFilter
+           ,Description
+           ,EmailCode
+           ,Deactivated
+           ,CreationTime
+           ,Creator
+           ,LastUpdate
+           ,LastUser
+           ,MenuID 
+ from OLM_MASTER.XBOLTADM.TB_WF_ALLOCATION
+ where not exists (	
+	select * from XBOLTADM.TB_WF_ALLOCATION
+ )	
+
+INSERT INTO XBOLTADM.TB_DIC_MASTER	
+           (DicCategory	
+           ,SysDomain	
+           ,Name	
+           ,Descriptioin)	
+select	
+	DicCategory
+    ,SysDomain	
+    ,Name	
+    ,Descriptioin	
+ from OLM_MASTER.XBOLTADM.TB_DIC_MASTER MS	
+ where not exists (	
+	select * from XBOLTADM.TB_DIC_MASTER DS where DS.DicCategory = MS.DicCategory COLLATE Korean_Wansung_CI_AS
+ )	
+	
+	
+INSERT INTO XBOLTADM.TB_DICTIONARY	
+           (TypeCode	
+           ,LanguageID	
+           ,Category	
+           ,Name	
+           ,Description	
+           ,SortNum	
+           ,VarFilter	
+           ,Editable	
+           ,ClientID)	
+select	
+	TypeCode
+    ,LanguageID	
+    ,Category	
+    ,Name	
+    ,Description	
+    ,SortNum	
+    ,VarFilter	
+    ,ISNULL(Editable,0)	
+    ,ClientID	
+ from OLM_MASTER.XBOLTADM.TB_DICTIONARY MS	
+ where not exists (	
+	select * from XBOLTADM.TB_DICTIONARY DS where DS.TypeCode = MS.TypeCode and DS.LanguageID = MS.LanguageID  and MS.Category = DS.Category
+ )
+	
+ update XBOLTADM.TB_MENU	
+  set  MenuID = MS.MenuID	
+      ,MenuCat = MS.MenuCat	
+      ,MenuType = MS.MenuType	
+      ,DicCode = MS.DicCode	
+      ,URL = MS.URL	
+      ,MNLVL = MS.MNLVL	
+      ,Icon = MS.Icon	
+      ,Deactivated = MS.Deactivated	
+from OLM_MASTER.XBOLTADM.TB_MENU MS, XBOLTADM.TB_MENU DS	
+Where MS.MenuID Collate Korean_Wansung_CI_AS = DS.MenuID Collate Korean_Wansung_CI_AS	
+	
+	
+INSERT INTO XBOLTADM.TB_MENU	
+           (MenuID	
+           ,MenuCat	
+           ,MenuType	
+           ,DicCode	
+           ,URL	
+           ,VarFilter	
+           ,MNLVL	
+           ,Icon	
+           ,Deactivated)	
+select	
+	MenuID
+	,MenuCat
+	,MenuType
+	,DicCode
+	,URL
+	,VarFilter
+	,MNLVL
+	,Icon
+	,Deactivated
+ from OLM_MASTER.XBOLTADM.TB_MENU MS	
+ where not exists (	
+	select * from XBOLTADM.TB_MENU DS where DS.MenuID = MS.MenuID COLLATE Korean_Wansung_CI_AI
+ )	
+	
+  update XBOLTADM.TB_REPORT	
+  set  ReportCode = MS.ReportCode	
+      ,ReportType = MS.ReportType	
+      ,OutputType = MS.OutputType	
+      ,Icon = MS.Icon	
+      ,Authority = MS.Authority	
+      ,IsPublic = MS.IsPublic	
+      ,ReportURL = MS.ReportURL	
+      ,ActionType = MS.ActionType	
+      ,PWidth = MS.PWidth	
+      ,PHeight = MS.PHeight	
+      ,MessageCode = MS.MessageCode	
+      ,Deactivated = MS.Deactivated	
+      ,ReadCNT = MS.ReadCNT	
+      ,Creator = MS.Creator	
+      ,CreationTime = MS.CreationTime	
+      ,LastUpdated = MS.LastUpdated	
+      ,ClientID = MS.ClientID	
+from OLM_MASTER.XBOLTADM.TB_REPORT MS, XBOLTADM.TB_REPORT DS	
+Where MS.ReportCode = DS.ReportCode	COLLATE Korean_Wansung_CI_AS
+	
+	
+INSERT INTO XBOLTADM.TB_REPORT	
+           (ReportCode	
+           ,ReportType	
+           ,OutputType	
+           ,Icon	
+           ,Authority	
+           ,IsPublic	
+           ,ReportURL	
+           ,ActionType	
+           ,PWidth	
+           ,PHeight	
+           ,MessageCode	
+           ,Deactivated	
+           ,ReadCNT	
+           ,Creator	
+           ,CreationTime	
+           ,LastUpdated	
+           ,ClientID)	
+select	
+	ReportCode
+    ,ReportType	
+    ,OutputType	
+    ,Icon	
+    ,Authority	
+    ,IsPublic	
+    ,ReportURL	
+    ,ActionType	
+    ,PWidth	
+    ,PHeight	
+    ,MessageCode	
+    ,Deactivated	
+    ,ReadCNT	
+    ,Creator	
+    ,CreationTime	
+    ,LastUpdated	
+    ,ClientID	
+ from OLM_MASTER.XBOLTADM.TB_REPORT MS	
+ where not exists (	
+	select * from XBOLTADM.TB_REPORT DS where DS.ReportCode = MS.ReportCode COLLATE Korean_Wansung_CI_AS
+ )	
+	
+	
+	
+  update XBOLTADM.TB_TFILTER	
+  set  TfilterCode = MS.TfilterCode	
+      ,SqlName = MS.SqlName	
+      ,TreeDataFiltered = MS.TreeDataFiltered	
+      ,StrType = MS.StrType	
+      ,Deactivated = MS.Deactivated	
+      ,CreationTime = MS.CreationTime	
+      ,Creator = MS.Creator	
+      ,LastUpdated = MS.LastUpdated	
+from OLM_MASTER.XBOLTADM.TB_TFILTER MS, XBOLTADM.TB_TFILTER DS	
+Where MS.TfilterCode = DS.TfilterCode COLLATE Korean_Wansung_CI_AS	
+	
+	
+INSERT INTO XBOLTADM.TB_TFILTER	
+           (TfilterCode	
+      ,SqlName	
+      ,TreeDataFiltered	
+      ,StrType	
+      ,Deactivated	
+      ,CreationTime	
+      ,Creator	
+      ,LastUser	
+      ,LastUpdated)	
+select	
+	TfilterCode
+      ,SqlName	
+      ,TreeDataFiltered	
+      ,StrType	
+      ,Deactivated	
+      ,CreationTime	
+      ,Creator	
+      ,LastUser	
+      ,LastUpdated	
+ from OLM_MASTER.XBOLTADM.TB_TFILTER MS	
+ where not exists (	
+	select * from XBOLTADM.TB_TFILTER DS where DS.TfilterCode = MS.TfilterCode COLLATE Korean_Wansung_CI_AS
+ )	
+
+ Insert Into XBOLTADM.Tb_SYMBOL_TYPE (
+	SymTypeCode,SymCategory,FromSymType ,ToSymType,ItemCategory,ItemTypeCode,ClassCode,DefLovCode,ImagePath,SortNum,DefWidth,DefHeight
+      ,DefFontColor,DefFontFamily,DefFontStyle,DefFontSize,DefColor,DefStrokeColor,DefFillColor,DefStrokeWidth,DefGradientColor
+      ,DefShadow,Dashed,DefLabelBGColor,DefSpacingTop,Deactivated,Creator,LastUser,CreationTime,LastUpdated,GlobalID,ClientID
+      ,ArisTypeNum,ArisSymbolNum,ArisSymbolGUID)
+SELECT SymTypeCode,SymCategory,FromSymType ,ToSymType,ItemCategory,ItemTypeCode,ClassCode,DefLovCode,ImagePath,SortNum,DefWidth,DefHeight
+      ,DefFontColor,DefFontFamily,DefFontStyle,DefFontSize,DefColor,DefStrokeColor,DefFillColor,DefStrokeWidth,DefGradientColor
+      ,DefShadow,Dashed,DefLabelBGColor,DefSpacingTop,Deactivated,Creator,LastUser,CreationTime,LastUpdated,GlobalID,ClientID
+      ,ArisTypeNum,ArisSymbolNum,ArisSymbolGUID
+  FROM OLM_MASTER.XBOLTADM.TB_SYMBOL_TYPE
+  
+  -- DBCFG.20220405.002 ADD MY ITEM ARC -- 
+	INSERT INTO XBOLTADM.TB_ARC  
+	      (ArcCode  ,ParentID ,SortNum ,Level  ,Type,FilterType ,UntitledOption ,DimTypeID   ,MenuID    ,VarFilter  ,Style   ,Icon   ,WID       
+	       )
+	SELECT  ArcCode  ,ParentID   ,SortNum   ,Level   ,Type   ,FilterType  ,UntitledOption  ,DimTypeID  ,MenuID   ,VarFilter  ,Style ,Icon   ,WID  
+	FROM OLM_MASTER.XBOLTADM.TB_ARC
+	Where ArcCode In ('PAL00','PAL0001','PAL0002','PAL0003','PAL0004','PAL0005')
+              

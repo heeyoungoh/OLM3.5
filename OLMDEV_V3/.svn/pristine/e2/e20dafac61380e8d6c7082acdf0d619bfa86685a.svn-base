@@ -1,0 +1,61 @@
+.mdi {
+   	color: #fff;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.cmm_btn {
+	display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 28px;
+    border-radius: 62px;
+    background: rgb(229, 229, 229);
+    margin-left: 5px;
+    transition: background-color 0.2s ease-out 0s, color 0.2s ease-out 0s, box-shadow 0.2s ease-out 0s;
+    padding: 0 14px;
+    box-sizing: border-box;
+}
+
+.cmm_btn .mdi {
+	margin-right: 5px;
+    margin-left: -2px;
+    transition: background-color 0.2s ease-out 0s, color 0.2s ease-out 0s, box-shadow 0.2s ease-out 0s;
+}
+
+.btn--add, .btn--save, .btn--edit, .btn--download {
+	color: #35a0da;
+    border: 1px solid #35a0da;
+    background: none;
+}
+
+.btn--add .mdi, .btn--save .mdi, .btn--edit .mdi , .btn--download .mdi {
+	color: #35a0da;
+}
+
+.btn--add:hover, .btn--save:hover, .btn--edit:hover, .btn--download:hover {
+    background-color: #35a0da;
+   	color: #fff;
+}
+ 
+ .btn--add:hover > .mdi,  .btn--save:hover > .mdi, .btn--edit:hover > .mdi , .btn--download:hover > .mdi, .btn--back:hover > .mdi {
+ 	color: #fff;
+ }
+ 
+ .btn--back{
+    border: 1px solid #c3c3c3;
+    color: #959595;
+    background: none;
+}
+
+.btn--back:hover{
+    color: #fff;
+  		background: #c3c3c3;
+}
+
+.btn--back .mdi {
+	color: #959595;
+}

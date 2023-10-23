@@ -1,0 +1,364 @@
+﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<c:url value="/" var="root" />
+<link rel="stylesheet" type="text/css"
+	href="<c:url value='/cmm/js/dhtmlxGrid/codebase/ext/dhtmlxgrid_pgn_bricks.css'/>">
+
+<spring:message
+	code="${sessionScope.loginInfo.sessionCurrLangCode}.WM00098" var="WM00098" />
+
+<script type="text/javascript">
+	var p_gridArea;
+	var screenType = "${screenType}";
+	var baseURL = "${baseUrl}";
+	var instanceNo = "${instanceNo}";
+	var changeSetID = "${changeSetID}";
+	var isProcInst = "${isProcInst}";	
+	var projectID = "${projectID}";
+	var myBoard = "${myBoard}";
+	var emailCode = "${emailCode}";
+	var boardTitle = "${boardTitle}";
+	
+	const searchBox = document.querySelector(".detail_box");
+	searchBox.addEventListener("keyup",(event) => {
+		event.stopPropagation();
+	    if(event.keyCode === 13) {
+	        doSearchListForum();
+	    }
+	});
+	
+	$("#categoryCode").val("${category}");
+	const detailShowBtn = document.querySelector("#forumDetailSearch");
+	const detail_box = document.querySelector(".detail_box");
+	if($("#itemTypeCode").val() || $("#SC_STR_DT").val() || $("#regUserName").val() || $("#authorName").val() || $("#categoryCode").val()){
+		detail_box.className = "detail_box show_detail";
+	}
+	detailShowBtn.addEventListener("click", (event) => {
+		if(event.pointerType !== "") detail_box.className = detail_box.className.includes("show_detail") ? "detail_box" : "detail_box show_detail";
+	});
+		
+	$(document).ready(function() {
+		// 초기 표시 화면 크기 조정 
+		$("#grdGridArea02").attr("style","height:"+(setWindowHeight() - 270)+"px;");
+		// 화면 크기 조정
+		window.onresize = function() {
+			$("#grdGridArea02").attr("style","height:"+(setWindowHeight() - 270)+"px;");
+		};
+		
+		$("#makeNew").click(function(){
+			var url = "registerForumPost.do"; 
+			var data = "s_itemID=${s_itemID}&noticType=${noticType}&BoardMgtID=${BoardMgtID}&isMyCop=${isMyCop}&screenType=${screenType}&listType=${listType}"
+						+ "&srID=${srID}&srType=${srType}&showItemInfo=${showItemInfo}&scrnType=${scrnType}"
+						+ "&emailCode="+emailCode+"&mailRcvListSQL=${mailRcvListSQL}&boardTitle="+encodeURIComponent(boardTitle);
+			if(instanceNo != ''){
+				data += "&instanceNo="+instanceNo+"&projectID="+projectID;
+			}
+			if(changeSetID != ''){
+				data += "&changeSetID="+changeSetID;
+			}
+			var target = "help_content";
+			ajaxPage(url, data, target);
+			return false;
+		});
+		$("input.datePicker").each(generateDatePicker);
+		setTimeout(function() {$('#searchValue').focus();}, 0);
+		setTimeout(function() {gridInit();doSearchListForum();}, 100);
+		
+		fnSelect('itemTypeCode', 'languageID=${sessionScope.loginInfo.sessionCurrLangType}&editable=1&category=OJ&BoardMgtID=${BoardMgtID}', 'getCategory', '${ItemTypeCode}','Select','forum_SQL');
+		
+		var timer = setTimeout(function() {
+			$("#itemTypeCode").append("<option value='General'>General</option>");
+		}, 250); //1000 = 1초
+		
+		
+		$("#backSR").click(function(){
+			var url = "processISP.do";
+			var scrnType = "${scrnType}";
+			if(scrnType == "" || scrnType == undefined ) scrnType = "srRqst";
+			var data = "srType=${srType}&scrnType="+scrnType+"&itemProposal=${itemProposal}&srID=${srID}&defCategory=${defCategory}"
+			
+			var target = "help_content";
+			ajaxPage(url, data, target);
+			return false;
+		});
+	});
+	
+	function setWindowHeight(){
+		var size = window.innerHeight;
+		var height = 0;
+		if( size == null || size == undefined){
+			height = document.body.clientHeight;
+		}else{
+			height=window.innerHeight;
+		}return height;
+	}
+	
+	function deleteforum(boardID){
+		var data = "boardID="+boardID;
+		var url = "boardForumDelete.do";// + data;
+		var target = "help_content";
+		ajaxPage(url, data, target);
+	}
+	
+	function InfoView(isNew, BoardMgtID, noticType, boardID, ItemID, s_itemID, userId) {
+		var data = "NEW="+isNew+"&BoardMgtID="+BoardMgtID+"&noticType="+101+"&boardID="+boardID+"&ItemID="+ItemID+"&s_itemID="+s_itemID+"&userId="+userId+"&srID=${srID}";
+		if(instanceNo != ''){
+			data += "&instanceNo="+instanceNo+"&projectID="+projectID;
+		}
+		var url = "viewForumPost.do";
+		
+		var target = "help_content";
+		ajaxPage(url, data, target);
+	}
+	
+	// BEGIN ::: GRID
+	function gridInit(){		
+		var d = setGridData();
+		p_gridArea = fnNewInitGrid("grdGridArea02", d);
+		p_gridArea.setImagePath("${root}${HTML_IMG_DIR}/");
+		p_gridArea.setIconPath("${root}${HTML_IMG_DIR}/");
+		p_gridArea.setSkin("board");
+		
+		fnSetColType(p_gridArea, 5, "img");
+		fnSetColType(p_gridArea, 12, "img");
+		p_gridArea.setColumnHidden(13, true);
+		p_gridArea.setColumnHidden(14, true);
+		p_gridArea.setColumnHidden(15, true);
+		p_gridArea.setColumnHidden(16, true);
+		p_gridArea.setColumnHidden(17, true);
+		
+		var categoryCnt = "${categoryCnt}";
+		if(categoryCnt == 0){
+			p_gridArea.setColumnHidden(8, true);
+		}
+		<c:if test="${showItemInfo == 'N' }">
+		p_gridArea.setColumnHidden(1, true);
+		p_gridArea.setColumnHidden(2, true);
+		p_gridArea.setColumnHidden(3, true);
+		</c:if>
+		p_gridArea.attachEvent("onRowSelect", function(id,ind){gridOnRowSelect(id,ind);});
+		
+		p_gridArea.enablePaging(true,20,10,"pagingArea",true,"recInfoArea");
+		p_gridArea.setPagingSkin("bricks");
+		p_gridArea.attachEvent("onPageChanged", function(ind,fInd,lInd){$("#currPage").val(ind);});
+		
+	}
+	
+	function setGridData(){ 
+		var category = $("#categoryCode").val(); if(category=='undefined' || category==null){category = "";}
+		var result = new Object();
+		result.title = "${title}";
+		result.key = "forum_SQL.forumGridList";
+		result.header = "${menu.LN00024},${menu.LN00021},${menu.LN00015},${menu.LN00028},${menu.LN00002},,${menu.LN00060},${menu.LN00390},${menu.LN00033},${menu.LN00004},Count,Reply,${menu.LN00068},boardID,ItemID,BoardMgtID,CategoryCode,ItemTypeCode"; //13
+		result.cols = "ItemTypeNM|Identifier|itemName|Subject|AttechImg|WriteUserNM|ModDT|BrdCategory|ItemMgtUserID|ReadCNT|CommentCNT|IsNew|BoardID|ItemID|BoardMgtID|CategoryCode|ItemTypeCode"; //12
+		result.widths = "30,100,100,220,*,30,100,100,100,90,50,50,40,30,30,30,0,0"; //13
+		result.sorting = "int,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str"; //13
+		result.aligns = "center,center,center,center,left,center,center,center,center,center,center,center,center,center,center,center,center,center";
+		result.data = "noticType="		+ $('#noticType').val()
+			        + "&searchType="    + $("#searchType").val()
+			        + "&searchValue="  	+ $("#searchValue").val()
+					+ "&pageNum="     	+ $("#currPage").val()
+					+ "&regUserName="     	+ $("#regUserName").val()
+					+ "&authorName="     	+ $("#authorName").val()
+					+ "&content="     	+ $("#content").val()
+					+ "&itemID=${itemID}"
+					+ "&myID=${myID}"
+					+ "&baseURL="		+ baseURL
+					/* + "&projectID=${projectID}" */
+					+ "&BoardMgtID=${BoardMgtID}"
+					+ "&myBoard="+myBoard
+					+ "&srID=${srID}";
+					
+
+        if("${srID}" == null || "${srID}" == ''){
+        	result.data +=  "&scStartDt="     + $("#SC_STR_DT").val()  + "&scEndDt="+ $("#SC_END_DT").val();
+        }
+		if($("#itemTypeCode").val() != null){
+			result.data = result.data +"&itemTypeCode="+$("#itemTypeCode").val();			
+		}
+		if(category != ''){
+			result.data = result.data +"&category="+category;
+		}
+		if(instanceNo != ''){
+			result.data += "&instanceNo="+instanceNo+"&isProcInst="+isProcInst;
+		}
+		return result; 
+	}
+	function gridOnRowSelect(id, ind){
+		var isNew = "N";
+		var BoardMgtID = p_gridArea.cells(id, 15).getValue();
+		var noticType= "${noticType}";
+		var boardID = p_gridArea.cells(id, 13).getValue();
+		var ItemID = p_gridArea.cells(id, 14).getValue();
+		var s_itemID = "${s_itemID}";
+		var pageNum= $("#currPage").val();
+		var itemTypeCode = p_gridArea.cells(id, 17).getValue();
+		var rowIds = p_gridArea.getAllRowIds().split(",");
+		var boardIds = "";
+		rowIds.forEach((e) => {
+		    if(boardIds == "") boardIds += p_gridArea.cells(e, 13).getValue();
+		    else boardIds += ","+p_gridArea.cells(e, 13).getValue();
+		})
+		
+		var data = "NEW="+isNew+"&BoardMgtID="+BoardMgtID+"&noticType="+noticType
+					+"&boardID="+boardID+"&ItemID="+ItemID+"&s_itemID="+s_itemID
+					+"&pageNum="+pageNum+"&isMyCop=${isMyCop}"
+			        + "&searchType="    + $("#searchType").val()
+			        + "&searchValue="  	+ $("#searchValue").val()
+			        + "&regUserName="  	+ $("#regUserName").val()
+			        + "&authorName="  	+ $("#authorName").val()
+			        + "&category="+$("#categoryCode").val()
+					+ "&itemTypeCode="+itemTypeCode
+					+ "&instanceNo="+instanceNo
+					+ "&listType=${listType}"
+					+ "&showItemInfo=${showItemInfo}"
+					+ "&screenType="+screenType
+					+ "&mailRcvListSQL=${mailRcvListSQL}"
+					+ "&emailCode="+emailCode
+					+ "&srID=${srID}"
+					+ "&srType=${srType}"
+					+ "&scrnType=${scrnType}"
+					+ "&boardIds="+boardIds
+					+ "&myBoard="+myBoard
+					+ "&boardTitle="+encodeURIComponent(boardTitle);
+					if("${srID}" == null || "${srID}" == ''){
+						data += "&scStartDt="     + $("#SC_STR_DT").val() + "&scEndDt="+ $("#SC_END_DT").val();
+					}
+					if(instanceNo != ''){
+						data += "&instanceNo="+instanceNo;
+					}
+		var url = "viewForumPost.do";
+		var target = "help_content";
+		ajaxPage(url, data, target);
+	}
+	// END ::: GRID	
+	//===============================================================================
+	function doSearchListForum(){ 
+		var d = setGridData();
+		fnLoadDhtmlxGridJson(p_gridArea, d.key, d.cols, d.data);
+	}
+</script>
+<div id="help_content"
+	style="display: block; overflow-y: auto; height: 100%;"
+	class="pdL10 pdR10">
+	<form name="boardForumList" id="boardForumList" action="" method="post"
+		onsubmit="return false;">
+		<input type="hidden" id="s_itemID" name="s_itemID" value="${s_itemID}">
+		<input type="hidden" id="BoardMgtID" name="BoardMgtID"
+			value="${BoardMgtID}"> <input type="hidden" id="BoardID" name="BoardID" value=""> <input type="hidden" id="languageID"		name="languageID"
+			value="${sessionScope.loginInfo.sessionCurrLangType}">
+		<input	type="hidden" id="noticType" name="noticType" value="${noticType}">
+		<input type="hidden" id="currPage" name="currPage" value="${pageNum}">
+
+		<div class="detail_box">
+			<div class="search_box flex">
+				<input type="text" id="searchValue" value="${searchValue}"
+					name="searchValue" class="stext" style="width: 310px;"
+					placeholder="${WM00098}" autocomplete="off">
+				<button class="detail" id="forumDetailSearch">${menu.LN00108}</button>
+			</div>
+			<!-- 상세검색 -->
+			<div class="search_detail">
+				<div class="box_col1">
+					<div>${menu.LN00021}</div>
+					<select id="itemTypeCode" class="sel"></select>
+				</div>
+				<div class="box_col1 mgL20">
+					<div>${menu.LN00003}</div>
+					<input type="text" id="content" value="${content}" name="content"
+						class="stext">
+				</div>
+				<div class="box_col2 mgL20">
+					<div>${menu.LN00390}</div>
+					<c:if test="${scStartDt != '' and scEndDt != ''}">
+						<fmt:parseDate value="${scStartDt}" pattern="yyyy-MM-dd"
+							var="beforeYmd" />
+						<fmt:parseDate value="${scEndDt}" pattern="yyyy-MM-dd"
+							var="thisYmd" />
+						<fmt:formatDate value="${beforeYmd}" pattern="yyyy-MM-dd"
+							var="beforeYmd" />
+						<fmt:formatDate value="${thisYmd}" pattern="yyyy-MM-dd"
+							var="thisYmd" />
+					</c:if>
+					<c:if test="${scStartDt == '' or scEndDt == ''}">
+						<fmt:formatDate value="<%=new java.util.Date()%>"
+							pattern="yyyy-MM-dd" var="thisYmd" />
+					</c:if>
+					<input type="text" id="SC_STR_DT" name="SC_STR_DT"
+						value="${beforeYmd}" class="text datePicker mgR6" size="8"
+						style="width: 117px"
+						onchange="this.value = makeDateType(this.value);" maxlength="10">
+					- <input type="text" id=SC_END_DT name="SC_END_DT"
+						value="${thisYmd}" class="text datePicker mgL6" size="8"
+						style="width: 117px"
+						onchange="this.value = makeDateType(this.value);" maxlength="10">
+				</div>
+				<span style="display: block; height: 10px;"></span>
+				<c:if
+					test="${boardMgtInfo.CategoryYN == 'Y' && brdCatListCnt != '0'}">
+					<div class="box_col1">
+						<div>${menu.LN00033}</div>
+						<select class="sel" id="categoryCode" name="categoryCode">
+							<option value="">ALL</option>
+							<c:forEach var="bcList" items="${brdCatList}" varStatus="status">
+								<option value="${bcList.CODE}">${bcList.NAME}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</c:if>
+				<div
+					class="box_col1 <c:if test="${boardMgtInfo.CategoryYN == 'Y' && brdCatListCnt != '0'}">mgL20</c:if>">
+					<div>${menu.LN00060}</div>
+					<input type="text" id="regUserName" value="${regUserName}"
+						name="regUserName" class="stext">
+				</div>
+				<div class="box_col1 mgL20">
+					<div>${menu.LN00004}</div>
+					<input type="text" id="authorName" value="${authorName}"
+						name="authorName" class="stext">
+				</div>
+				<button onclick="doSearchListForum()" class="submit_detail">${menu.LN00047}</button>
+			</div>
+		</div>
+		<!-- END :: SEARCH -->
+		<div class=" pdT10 pdB10 align-center flex justify-between">
+			<p style="font-size: 13px; font-weight: bold;" class="mgR120 mgL10">${boardTitle}</p>
+			<div class="floatR">
+				<c:choose>
+					<c:when
+						test="${boardMgtInfo.MgtOnlyYN eq 'Y' && boardMgtInfo.ReplyOption eq '3' && ItemMgtUserMap.AuthorID == sessionScope.loginInfo.sessionUserId}">
+						<button class="cmm-btn floatR " style="height: 30px;" id='makeNew'
+							value="Request review">Request review</button>
+					</c:when>
+					<c:when
+						test="${boardMgtInfo.MgtOnlyYN eq 'Y' && boardMgtInfo.ReplyOption ne '3' && boardMgtInfo.MgtUserID == sessionScope.loginInfo.sessionUserId}">
+						<button class="cmm-btn floatR " style="height: 30px;" id='makeNew'
+							value="Post Subject">Post Subject</button>
+					</c:when>
+					<c:when test="${boardMgtInfo.MgtOnlyYN ne 'Y'}">
+						<button class="cmm-btn floatR " style="height: 30px;" id='makeNew'
+							value="Write">Write</button>
+					</c:when>
+				</c:choose>
+				<c:if test="${srID ne ''}">
+			&nbsp;<button class="cmm-btn" style="height: 30px;" id='backSR'
+						value="Back">Back</button>&nbsp;
+		</c:if>
+			</div>
+		</div>
+		<!-- BIGIN :: LIST_GRID -->
+		<div id="gridDiv" class="mgB10 clear">
+			<div id="grdGridArea02" style="height: 300px; width: 100%"></div>
+		</div>
+		<!-- END :: LIST_GRID -->
+		<!-- START :: PAGING -->
+		<div style="width: 100%;" class="paginate_regular">
+			<div id="pagingArea" style="display: inline-block;"></div>
+			<div id="recinfoArea" class="floatL pdL10"></div>
+		</div>
+		<!-- END :: PAGING -->
+	</form>
+</div>

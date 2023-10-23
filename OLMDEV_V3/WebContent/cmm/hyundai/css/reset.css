@@ -1,0 +1,36 @@
+@charset "utf-8";
+/* html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small, */
+/* strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption, */
+/* figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{ */
+/*     margin:0;padding:0;border:0;outline:0;vertical-align:baseline;background:transparent;line-height:inherit;color:inherit; line-height:inherit;box-sizing:border-box;word-break:keep-all; */
+/*     appearance: none; */
+/*     -webkit-appearance: none; */
+/* } */
+/* body.ie,.ie div,.ie span,.ie object,.ie iframe,.ie h1,.ie h2,.ie h3,.ie h4,.ie h5,.ie h6,.ie p,.ie blockquote,.ie pre,.ie abbr,.ie address,.ie cite,.ie code,.ie del,.ie dfn,.ie em,.ie img,.ie ins,.ie kbd,.ie q,.ie samp,.ie small,.ie strong,.ie sub,.ie sup,.ie var,.ie b,.ie i,.ie dl,.ie dt,.ie dd,.ie ol,.ie ul,.ie li,.ie fieldset,.ie form,.ie label,.ie legend,.ie table,.ie caption,.ie tbody,.ie tfoot,.ie thead,.ie tr,.ie th,.ie td,.ie article,.ie aside,.ie canvas,.ie details,.ie figcaption,.ie figure,.ie footer,.ie header,.ie hgroup,.ie menu,.ie nav,.ie section,.ie summary,.ie time,.ie mark,.ie audio,.ie video{ */
+/* 	word-break:break-all; */
+/* } */
+html,body{font-size:16px; font-family:'맑은 고딕','gulim',sans-serif; color:#333; line-height:100%;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,small{display:block;}
+blockquote,q{quotes:none;}
+mark{background-color:#ff9;color:#333;font-style:italic;font-weight:bold;}
+del{text-decoration: line-through;}
+blockquote:before,blockquote:after,q:before,q:after {content:'';content:none;}
+hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;}
+img,fieldset{border:0;vertical-align:middle;}
+ul,ol{list-style:none;}
+em,address{font-style:normal;}
+/* table{border-collapse:collapse;border-spacing:0;table-layout:fixed;} */
+a{text-decoration:none;color:#333;vertical-align:baseline;}
+button{cursor:pointer;}
+select:focus,
+textarea:focus,
+input:focus,
+button:focus{outline:none;}
+a:hover,a:active,a:focus{text-decoration:none;}
+::selection{background:rgba(213, 63, 65, .2);}
+.blind{overflow:hidden;position:absolute;clip:rect(0,0,0,0);width:1px;height:1px;margin:-1px;border:0;padding:0;}
+caption.blind{position:static;}
+.clearfix:after{content:'';display:block;clear:both;}
+.float-left{float:left;}
+.float-right{float:right;}
+

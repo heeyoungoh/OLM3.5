@@ -1,0 +1,479 @@
+TB_ARC.VarFilter varchar(max)  추가
+
+2016/04/25
+
+UPDATE [OLM_DEMO].[XBOLTADM].[TB_ARC]
+   SET [VarFilter] = 'ITSP'
+ WHERE ArcCode = 'SRMGT' or ArcCode = 'SRREQ'
+
+2016/04/26
+
+
+UPDATE [OLM_DEMO].[XBOLTADM].[TB_MENU_ALLOC]
+   SET [VarFilter] = '&screenType=ITM&srType=ITSP'
+ 	WHERE MenuID = 'MN134'
+
+
+2016/04/28
+- TB_MENU : MN136	srCatList 레코드 추가
+- TB_CONFIG : CFG3140	CFG3100	NULL	NULL	
+- TB_DICTIONARY : CFG CFG3140 SR Category
+
+2016/04/29
+- TB_BOARD.Notice char(1)  Default = 0 추가
+ Update Notice = '0'
+
+2016/05/02
+
+ - LN00081 --> Change Set 으로 변경
+ - TB_CR_MST.ITSMIF Char(1) Def = 0 추가
+ 
+ 2016/05/03
+ 
+ TB_EMAIL_LOG  테이블 수정
+ 
+UPDATE [OLM_DEMO].[XBOLTADM].[TB_SR_CAT]
+   SET [ParentID] = '0'
+	 WHERE ParentID is Null
+	
+Insert
+[XBOLTADM].[TB_DIC_MASTER]
+	DicCategory	Name	Description
+	SRAREA	SR Area	NULL
+Insert
+[XBOLTADM].[TB_DICTIONARY]
+	TypeCode	LanguageID	Category	Name	Description	SortNum	ClientID
+	SRArea1	1042	SRAREA	L1	NULL	1	NULL
+	SRArea2	1042	SRAREA	L2	NULL	2	NULL
+
+
+
+2016/05/10
+INSERT INTO [XBOLTADM].[TB_REPORT](
+		[ReportCode]
+      ,[ReportType]
+      ,[OutputType]
+      ,[Authority]
+      ,[IsPublic]
+      ,[ReportURL]
+      ,[Deactivated]
+      ,[ReadCNT]
+      ,[Creator]
+      ,[CreationTime]
+      ,[LastUpdated]
+      ,[ClientID]
+ )VALUES(
+	'RP00028',
+	'PJT',
+	'EXE',
+	4,
+	'1',
+	'srStatistics.do',
+	'0',
+	NULL,
+	NULL,
+	GETDATE(),
+	GETDATE(),
+	NULL
+ )
+
+ INSERT INTO [XBOLTADM].[TB_DICTIONARY](
+		[TypeCode]
+      ,[LanguageID]
+      ,[Category]
+      ,[Name]
+      ,[Description]
+      ,[SortNum]
+      ,[ClientID]
+ )VALUES(
+	'RP00028',
+	'1042',
+	'RP',
+	'SR 처리현황 통계',
+	'',
+	NULL,
+	NULL
+ )
+insert into [XBOLTADM].[TB_REPORT_ALLOCATION](
+ ReportCode	,ClassCode	,ProjectID	,TemplCode	,VarFilter)
+Values('RP00028'	,NULL	,1	,'TMPL002'	,NULL)
+
+2016/05/13 DicCode 추가 
+ Category = PJTSTS, Code = APRV, Name = 승인 요청
+ 
+ 2016/05/17
+ 
+ TB_CR_MST.IFMessage nvarchar(100) 추가
+ 
+ 2016/05/19
+ 
+ TB_WF.ServiceCode  Varchar(100) 추가  --> 결재선 서비스 코드
+ TB_WF.AprvOption varchar(10)  Def = PRE 추가  --> PRE = 선결, POST =  후결, DicMaster = 'APRVOPTION'
+ Update TB_WF.Category = 'CSR'  , Def = 'CSR'
+ 
+ TB_WF_INST.Comment nvarchar(max) 추가 --> 결재 승인 코멘트 용
+ TB_WF.AprvOption varchar(10)  Def = PRE  추가   
+ 
+ TB_CR_MST.ProcOption varchar(10) Def = 'POST' 추가 POST = 후 조치 , ADV = 선 조치, DicMaster = 'PROCOPTION'
+ 
+ UPDATE [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+   SET [Name] = '접수일'
+ WHERE TypeCode = 'LN00077' and LanguageID = 1042
+ 
+ UPDATE [OLM_DEMO].[XBOLTADM].[TB_PROC_LOG_CONFIG]
+   SET [EventValue] = 'CMP'
+      , [ActivityCD] = 'ACTP004'     
+ WHERE FunctionNM = 'saveNewSRCR.do'
+ 
+ 
+ 2016/05/24
+   insert into [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+  ([TypeCode]
+      ,[LanguageID]
+      ,[Category]
+      ,[Name]
+      ,[Description]
+      ,[SortNum]
+      ,[ClientID])
+      values('LN00278','1042', 'LN','접수지연',NULL,NULL,NULL)
+      
+  insert into [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+  ([TypeCode]
+      ,[LanguageID]
+      ,[Category]
+      ,[Name]
+      ,[Description]
+      ,[SortNum]
+      ,[ClientID])
+      values('LN00279','1042', 'LN','처리지연',NULL,NULL,NULL) 
+   
+   
+   insert into [OLM_DEMO].[XBOLTADM].[TB_REPORT]
+  ([ReportCode]
+      ,[ReportType]
+      ,[OutputType]
+      ,[Authority]
+      ,[IsPublic]
+      ,[ReportURL]
+      ,[Deactivated]
+      ,[ReadCNT]
+      ,[Creator]
+      ,[CreationTime]
+      ,[LastUpdated]
+      ,[ClientID])
+      values (
+      'RP00029','PJT','EXE',4,'1','srMonitoring.do?screenType=srRcv','0',NULL,'1', GETDATE(),GETDATE(),NULL
+      )
+   
+   INSERT INTO [OLM_DEMO].[XBOLTADM].[TB_REPORT_ALLOCATION]
+  ([ReportCode]
+      ,[ClassCode]
+      ,[ProjectID]
+      ,[TemplCode]
+      ,[VarFilter]
+   )
+   VALUES('RP00029',NULL,'1','TMPL002',NULL)
+      
+   INSERT INTO [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+  ([TypeCode]
+      ,[LanguageID]
+      ,[Category]
+      ,[Name]
+      ,[Description]
+      ,[SortNum]
+      ,[ClientID])
+      VALUES ('RP00029', '1042', 'RP', 'SR 모니터링' , '', NULL, NULL)
+      
+  2016/05/25  by SKLee
+  
+   - TB_SR_MST.ITSMIF char(1) , Def = N 필드 추가함
+    
+   - CR Status 추가  : Category = CRSTS, 
+     Code = TEMP, Name = 임시 저장 SortNum = 1
+     Code = APRV, Name = 승인 요청 SortNum = 2
+     
+     
+  2016/05/27
+  
+  DicCat = 'APRVSTS' 추가함
+  INSERT INTO [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+  ([TypeCode]
+      ,[LanguageID]
+      ,[Category]
+      ,[Name]
+      ,[Description]
+      ,[SortNum]
+      ,[ClientID])
+        VALUES ('0', '1042', 'APRVSTS', '편집 중' , '', NULL, NULL)
+          VALUES ('1', '1042', 'APRVSTS', '상신' , '', NULL, NULL)
+            VALUES ('2', '1042', 'APRVSTS', '승인완료' , '', NULL, NULL)
+              VALUES ('3', '1042', 'APRVSTS', '반려' , '', NULL, NULL)
+                VALUES ('4', '1042', 'APRVSTS', '상신취소' , '', NULL, NULL)
+
+ 
+ TB_PROC_LOG.SEQ --> Key 값 1씩 자동 증가하게 처리
+ 
+ 2016/05/31
+ 
+ UPDATE [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+   SET [Name] = '접수일'  
+  where TypeCode = 'LN00077' and LanguageID  = '1042'
+  
+  UPDATE [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+   SET [Name] = 'Receipt date'  
+ where TypeCode = 'LN00077' and LanguageID  = '1033'
+ 
+ UPDATE [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+   SET [Name] = '등록일'  
+  where TypeCode = 'LN00078' and LanguageID  = '1042'
+  
+  UPDATE [OLM_DEMO].[XBOLTADM].[TB_DICTIONARY]
+   SET [Name] = 'Registered date'  
+ where TypeCode = 'LN00078' and LanguageID  = '1033'
+ 
+ 2016/07/12
+ TB_ITEM_ATTR LastUpdated(datetime) 추가
+ 
+ UPDATE [HTC_OPR].[XBOLTADM].[TB_DICTIONARY]
+			  SET [Name] = '매우 불만족&nbsp;&nbsp;&nbsp;&nbsp;불만족&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;보통&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					  	만족&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;매우만족'			    
+			 WHERE TypeCode = 'LN00292'
+			 
+DicCat SPOINTNM Satisfaction point 추가 , Dic 1 2 3 4 5	 
+
+2016/07/14
+
+TB_SR_ROLE_TYPE table 추가
+
+DicCat = SRROLETP ,Dictionary value A R 추가
+
+TB_TASK_TYPE.LastUpdate --> LastUpdated로 수정
+
+2016/07/20
+
+TB_SR_CAT.ProcessType Varchar(10) 1: SR , 2: SR>>CR, 3: SR>>CSR>>CR
+
+
+2016/07/21
+
+TB_PROC_LOG.CommentParameter  Varchar(100) 추가, 
+transferReceipt.do  CommentParameter = transferReason			
+
+
+--> 7/27 HTC 적용
+
+2016/08/02
+
+TB_SR_MST.CompanyID bigint 추가
+EMAIL_SENDER MULTI_COMPANY Properties 추가
+
+2016/08/08
+
+- TB_TEAM.ManagerID bigint 추가
+- Dic. SRSTS 'MRV' 소속부서장 검토 추가
+- PROC_LOG_CONFIG : approveSR 추가
+- ACTP0001A 추가
+- TB_TEMPLATE.VarFilter Varchar(100) 추가
+- Dic. EMAILCODE 'SRMRV' SR 승인 요청 알림 추가
+- CSR Status : CNGCL 삭제
+
+2016/08/10
+
+ - TB_MY_ITEM.AssignmentType Varchar(10)으로 수정 Def = 'SRROLETP'
+ - TB_MY_ITEM.OrderNum Int 추가
+ - TB_DIC_MASTER DICCAT 추가 , Dictionary Data 추가
+ - fn_GetChangeStatus 스칼라 함수 추가
+ - TB_WF.MenuID Varchar(10) 추가
+ 
+ 2016/08/16
+ 
+  - TB_WF_INST.CurWFStepID bigint 추가
+  - Update AssignmentType
+ 
+	  UPDATE [HTC_OPR].[XBOLTADM].[TB_MY_ITEM]
+	   SET [AssignmentType] = 'SRROLETP'
+	   
+ --> 2016/08/16 HTC 적용
+ 
+ 2016/08/22 
+ 
+ TB_WF_INST.CurWFStepID --> LastSeq Int 로 수정함
+ message properties 수정, WF_STEP 레코드 수정
+ 
+ 2016/08/23
+ 
+ TB_OLM_ROLE_TYPE 신규 생성 , 기존  TB_SR_ROLE_TYPE 대체함
+ TB_WF_INST.CurSeq Int 추가 WFDocType varchar(10) 추가
+ TB_DIC_MASTER  WFDOCTP Workflow doc. Type 추가, Dic.  CSR = '변경과제' 
+ 
+ 2016/08/29
+ 
+ DIC. LN00046 --> 편집/Edit,  LN00040 --> 리포트 목록/Report List로  수정
+  LN00066, 80, 242 , 243, 244, 245 _Blank (미할당) 처리
+  =================================================
+  UPDATE [LF_OPR].[XBOLTADM].[TB_DICTIONARY]
+   SET [Name] = '_Blank'
+ WHERE TypeCode in ('LN00066', 'LN00080', 'LN00242' , 'LN00243', 'LN00244', 'LN00245')
+  
+  sc_Edit.png 이미지 추가
+  
+  
+  -->2016/08/30  LF 적용
+  
+  2016/08/31
+  
+  TB_WF.Cateogory --> Category 로 수정
+  
+  2016/09/05
+  
+  TB_EV_SCORE 신규 추가
+  TB_ATTR_TYPE  AT00031 --> Data type == MLOV 수정
+  
+2016/09/05
+
+ TB_ITEM, TB_ITEM_ATTR  ItemID = 9 'Control' value 추가 
+  ItemType 'CN00209' /Role/Todo 생성 , ItemClass 'CNL0209' 신규 생성
+ Alter TABLE HTC_OPR.XBOLTADM.TB_ITEM_ATTR ADD Seq bigint IDENTITY (1, 1) NOT NULL  
+
+ 2016/09/08
+ 
+ UPDATE [LF_OPR].[XBOLTADM].[TB_MENU]   SET [URL] = 'itemConnection' WHERE MenuID = 'MN056' 
+ UPDATE [LF_OPR].[XBOLTADM].[TB_DICTIONARY]   SET [Name] = 'To do/To check'  WHERE TypeCode = 'LN00079'  
+ UPDATE [LF_OPR].[XBOLTADM].[TB_DICTIONARY]   SET [Name] = '결재일'  WHERE TypeCode = 'LN00075' and LanguageID = 1042
+ UPDATE [LF_OPR].[XBOLTADM].[TB_DICTIONARY]    SET [Name] = '부서'    where TypeCode  = 'LN00104' --> LF only
+ Dic cat Update : PROCOPTION, APRVOPTION --> LF Only 
+ 
+ MN138 ~ MN142 등록
+ 
+ - TB_WF_STEP_INST.ApprovalDate 추가 
+
+ - Server.xml SAP Hana resource 추가
+  <Resource auth="Container" driverClassName="com.sap.db.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/hanaDB" username="sfolm" password="Sfolm1234" type="javax.sql.DataSource" url="jdbc:sap://hana4.innoever.net:30002?databaseName=ZOLM" > </Resource>
+  
+  http://help.sap.com/saphelp_hanaplatform/helpdata/en/ff/15928cf5594d78b841fbbe649f04b4/frameset.htm
+  
+ - PROC_LOG_CONFIG 추가
+  
+  --> HTC/LF 적용함
+  
+  2016/09/13
+  
+  CL11003(Initial), CL11004(Terms) 추가
+  MN00143 추가
+  
+  2016/09/19
+  
+  TB_ITEM_CLASS.EvaluationClass Varhcar(10) 추가
+  TB_ATTR_TYPE_LOV.Score Float 추가
+
+2016/09/20
+
+ Update dicitionary 
+   where typecode in ('LN00242', 'LN00243','LN00244','LN00245')
+   
+2016/09/23
+
+TB_TEMPLATE.Type Varchar(2)  --> Varchar(10) , popUp 변수 설정
+MN144	goProjectPop 추가
+TB_ATTR_TYPE_LOV LinkFilter Varchar(200) --> Link 호출 함수의 패러미터로 사용
+
+
+
+2016/09/27
+
+TB_EV_MST 신규 생성 
+TB_ITEM_CLASSS.EvalutionClass Varchar(10) 추가
+TB_ITEM_TYPE.RootItemID 업데이트  --> HQC만 
+		
+--> SKH 적용
+		
+2016/10/06
+
+TB_PROJECT.AprvOption Varchar(10) 추가
+TB_TEMPLATE.Invisible char(1), def = 0 추가
+ARC >> Item Tree MN001 전부 할당	
+TB_PROJECT_TEAM_REL 테이블 신규 생성
+
+ --> HWDFS 적용
+	
+2016/10/10
+fn_GetIdxDataLikeSplit 함수 추가 
+Split 유형의 함수, 문자열에서 구분자(@iSeparator)로 몇번째 단어 가져오기,예: SELECT 데이터베이스명.소유자명.fn_GetIdxDataLikeSplit('가-나-다',2,'-') --> '나'      
+  
+ --> SKH 적용 완료
+ 
+ 2016/10/13
+   
+ AT00061 Sort No.로 명칭 수정 및  IsComLang 체크
+ CL04001(시스템 타입 또는 업무영역)에  AT00061 할당, Sort No 값 업데이트  
+--> LF 적용 완료 
+ 
+ 2016/10/14
+ 
+ TB_MEMBER.TelNum MTelNum varchar(200) 수정
+LF TB_TEAM where TeamID = 1 TeamType = 2로  업데이트
+ TB_MEMBER.IsFormal Char(1) Default = 0 필드 추가, 
+ 외부 IF 시 IsFormal = 1(HR에서 IF 된 사용자는 1로  생성, OLM 에서 생성 시는 0으로 생성)인 레코드에 대해서 일단  Active = 0 업데이트 후 ,
+ 인사 DB에 값이 있거나 재직 중 값이 있으면  Active = 1로 업데이트함,
+ 
+ 2016/10/17
+ --리포트 VarFilter 값 업데이트
+ UPDATE [OLM_DEMO].[XBOLTADM].[TB_REPORT_ALLOCATION]
+   SET  [VarFilter] = '&url=wordExport_OLM'  WHERE ReportCode in ( 'RP00004' , 'RP00008')
+   
+ 2016/10/19
+ TB_CHANGE_SET.Version nvachar(50) 추가
+ TB_TFILTER  DMG menuTreeListByDMG_treeList 추가   
+ TB_ITEM_TYPE  'CN01301' FromType = 'OJ00013' ToType = 'OJ00001' 값 추가
+ TB_ITEM_CLASS 'CNL1301' 추가 , 속성 할당
+
+---> LF 적용
+
+ 2016/10/24
+ 
+TB_ATTR_TYPE.ALLOCATION.AreaHeight Int 추가 
+UPDATE [OLM_DEMO].[XBOLTADM].[TB_ATTR_TYPE_ALLOCATION]
+   SET [AreaHeight] = 140
+   where AttrTypeCode in (Select AttrTypeCode from XBOLTADM.TB_ATTR_TYPE where HTML = '1')
+ 
+UPDATE [OLM_DEMO].[XBOLTADM].[TB_ATTR_TYPE_ALLOCATION]
+   SET [AreaHeight] =20
+   where AttrTypeCode in (Select AttrTypeCode from XBOLTADM.TB_ATTR_TYPE where HTML = '0' or HTML is Null or HTML = '')
+      
+ --> SKH 적용  
+  
+ 2016/10/25
+ 
+ ALTER TABLE LF_OPR.[XBOLTADM].[TB_BOARD_MGT] ADD  CategoryYN CHAR(1)  DEFAULT ('N')
+   
+TB_BOARD_MGT_CAT 테이블 레코드 추가, TB_DICTIONARY BRDCAT 레코드 추가         
+
+2016/11/03
+
+- Dictionary SRSTS , CRCLS , 시스템 변경완료 추가   , ACTP ACTP005A ACTP006A 시스템 변경완료  추가  
+
+PROCESS_VIEW, VISIT_LOG_VIEW , SRSUM VIEW 추가 , TB_ACTP_CONFIG 추가  ,PROC_CONFIG saveNewCr.do 추가,
+Procedure UPDATE_CR_SR 추가
+
+VISIT_LOG_VIEW, VISIT_COUNT_VIEW 추가, rootParent 함수 추가
+
+2016/11/11
+
+DEFSYMCODE_TOITEM 프로시저 수정
+
+--> HTC 적용완료 , SKH 적용 완료 , LF 적용완료
+
+2016/12/15
+
+TB_LANGUAGE.ExtCode char(2) 추가, LangCode 값이 다른 값을 사용하는 경우 이 필드 사용함 (예 : KO --> KR)
+
+2016/12/20
+
+TW_PROCESS.ItemTypeCode Varchar(10), L0ItemID bigint 추가, Insert Process 프로시저 수정 , TB_ITEM_CLASS.Level 업데이트
+
+Server.XML에   maxPostSize="-1" 추가
+
+2016/12/28
+
+TB_CHANGE_SET.ValidFrom, ValidTo datetime 추가
+   

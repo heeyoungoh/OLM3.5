@@ -1,0 +1,122 @@
+﻿﻿
+============== SFOLM Version 3.5 =====================================================================================================				
+    
+DBCFG.20220104.001 TB_WF_ALLOC 테이블 삭제 후 신규 생성, 레코드  OLM_MASTER 기준으로 업데이트 (신규 구축 사이트, Mando,HEC,KDNVN,LF) 
+                   Update TB_WF_INST  Set WFAllocID = #{WFAllocID}  --> CS 결재, SR 결재 각각  TB_WF_ALLOC 테이블 레코드 기준으로 업데이트    
+               002 CXN Item data backup insert  실행 :  최종  Released된 ChangeSetID( Item Type = OJ00001, OJ0005, OJ00007) --> ItemID  --> CXN Item List(Category = 'CN')를
+                   TB_REVISION Table에  insert ( SRCode 'SR2201050003' 참조)       
+               003 Procedure [TW_INSERT_ITEM_AUTHOR_LOG] 업데이트 : 기존 ITEM.AuthorID만 추출 -->  TB_TEAM.RoleManagerID도 추출
+               004 TB_CONFIGURATION CFG1400  레코드 삭제            
+               005 TB_TEAM_ROLE.Assigned   Update Assigned = 2  Where Assigned = 1 실행 ( HEC, KDNVN 등 기존 관련조직 메뉴 사용  Client)
+               006 TB_TFILTER Record Full update ( OLM_MASTER 기준)
+               007 fn_GetPrePostFromElement DB 함수 수정
+                    
+DBCFG.20220208.009 TB_ELEMENT.ReleaseNo Bigint null 추가   및 아래 업데이트 쿼리 실행      
+						Update XBOLTADM.TB_ELEMENT
+							Set ReleaseNo = A.RCSID		  
+							From (
+									Select Distinct  MDL.ModelID, MDL.ChangeSetID as MCSID, ELM.Link,  Max(REV.ChangeSetID) as RCSID 
+									From XBOLTADM.TB_MODEL MDL 
+										INNER Join XBOLTADM.TB_ELEMENT ELM ON ELM.ModelID = MDL.ModelID
+										INNER JOIN XBOLTADM.TB_ITEM_ATTR_REV  REV ON ELM.Link = REV.ItemID and  REV.AttrTypeCode = 'AT00001'  and REV.LanguageID = 1042		 	    
+									Where MDL.ChangeSetID in (Select ChangeSetID from XBOLTADM.TB_CHANGE_SET where Status = 'CLS') AND REV.ChangeSetID < MDL.ChangeSetID
+									Group By MDL.ModelID, MDL.ChangeSetID, ELM.Link				
+								) A , XBOLTADM.TB_ELEMENT ELM
+						 Where ELM.ModelID = A.ModelID and ELM.Link = A.LInk	             
+               010 TB_SEARCH_LOG 테이블 추가        
+               011 TB_MENU.MenuType Update
+                   UPDATE [XBOLTADM].[TB_MENU]    SET menuType = '01'  WHERE menuid in (  'MN013' ,'MN025', 'MN075' , 'MN076' ,'MN154' )
+                   
+DBCFG.20220221.012 TB_CONFIGURATION 테이블 칼럼 추가     --> OLM_MASTER 기준으로 추가 후 Record 전체 업데이트                              
+               013 fn_GetMainCSVersion,  fn_GetParentTeamByTeamType DB 함수 추가
+               014 TW_USER_LOG Table 신규 생성 , Procedure  'TW_INSERT_VISIT_USER_LOG' 추가
+
+DBCfG.20220311.015 DB함수  fn_GetParentItemID 추가 
+               016 UPDATE XBOLTADM.TB_FILE  SET blocked = 2  From XBOLTADM.TB_FILE F, XBOLTADM.TB_ITEM  I
+				   WHERE F.Blocked = 1 and  F.ChangeSetID != I.ReleaseNo and F.ChangeSetID != I.CurChangeSet AND F.DocCategory = 'ITM'
+               017 TW_ITEM_CXN  Table 추가   ,  [XBOLTADM].[TW_INSERT_ITEM_CXN] 프로시저 추가
+               018 fn_GetWFMemberListIndex, fn_GetMemberRoll 파라메터 varchar(100) -> nvarchar(max)로 변경
+                   (케피코, OLM_MASTER 적용 완료)
+               019  fn_GetMemberRoll -->  fn_GetMemberRole로 신규 생성함    
+               020 TW_ITEM_PATH_TXT 테이블 추가, TW_INSERT_ITEM_PATH_TXT Procedure 실행
+               
+DBCFG.20220405.021 File blocked Update >> DB Config. Query 참조
+               022 My Item 관련 Arc 추가 ( 'PAL00','PAL0001','PAL0002','PAL0003','PAL0004','PAL0005'), Dictionary 포함
+                
+DBCFG.20220607.023 TB_SEARCH_LOG Table 재성성(OLM_MASTER 기준)  >> Seq 기본 키 설정, ID 자동 증가 설정
+
+DBCFG.20220623.024 ESM_SR_MST.Reason nvarchar(500) 필드 추가              
+
+DBCFG.20220705.025 OLM_ITEM_DATA_VIEW, OLM_FILE_DATA_VIEW, TW_INSERT_ITEM_PATH_TXT Procedure 추가   
+
+DBCFG.20220810.026 TB_MY_SCHEDULE.Status Char(1),  Def. = 1 추가
+
+DBCFG.20220816.027 ESM_SR_MST.IsPublic Char(1),  Def. = 1 추가
+
+DBCFG.20220823.028 DELETE FROM [XBOLTADM].[TB_MODEL_TEMPL]  --> template Model XML 복사 생성 로직 수정 후 기능 사용필요
+
+DBCFG.20220824.029 TB_ELEMENT.ImageURL varchar(255) Null 추가
+
+DBCFG.20220830.030 fn_GetMyAbsPath DB 함수 수정 
+
+DBCFG.20220906.031  TB_FILE.FileFormat data update (2021년 현대케피코 이전 프로젝트)
+					
+					UPDATE [XBOLTADM].[TB_FILE]   SET  [FileFormat] = 'pdf' WHERE FileRealName like '%pdf%'
+					UPDATE [XBOLTADM].[TB_FILE]   SET  [FileFormat] = 'doc' WHERE FileRealName like '%doc%'
+					UPDATE [XBOLTADM].[TB_FILE]   SET  [FileFormat] = 'xls' WHERE FileRealName like '%xls%'
+					UPDATE [XBOLTADM].[TB_FILE]   SET  [FileFormat] = 'ppt' WHERE FileRealName like '%ppt%'
+					
+DBCFG.20221004.032 TB_VISIT.LOG.IpAddress  varchar(50)으로 수정		
+
+DBCFG.20221011.033 [fn_GetPrePostFromElement] DB 함수 수정
+
+DBCFG.20221012.034 [XBOLTADM].[UPDATE_ITEMMCNFromTo] Procedure 생성
+
+DBCFG.20221021.035 fn_CheckItemAccCtrl DB 함수 추가
+
+DBCFG.20221024.036 TB_MY_ITEM.Memo nvarchar(Max) 추가
+
+DBCFG.20221026.037 XBOLTADM.fn_GetTeamRoleTeamNMList function 생성
+
+DBCFG.20221107.038 XBOLTADM.TB_MY_ITEM.MbrTeamID bigint 추가
+
+DBCFG.20221109.039 XBOLTADM.TEAM_ROLE.ProjectID 추가
+
+DBCFG.20221114.040 fn_GetPrePostActivity DB 함수 추가
+
+DBCFG.20221122.041 TB_TEAM_ROLE.ManagerID, FromTeamID bigint 추가
+
+DBCFG.20221122.042 TB_ELEMENT.ReleaseNo 값이 Null인 Record 업데이트
+
+				   UPDATE [XBOLTADM].[TB_ELEMENT]  SET [ReleaseNo] = I.ReleaseNo    
+ 				   From XBOLTADM.TB_ELEMENT E,  XBOLTADM.TB_ITEM I  
+ 				   WHERE E.Link = I.ItemID AND E.ReleaseNo is Null
+ 				   
+DBCFG.20221125.043 fn_GetPjtSubTeamList, fn_GetMyAbsPathForPjtOrg DB 함수 추가
+
+DBCFG.20221202.044 TB_TEAM_JOB_LOG 테이블 추가, XBOLTADM.TB_PJT_TEAM_REL 신규 생성(기존 Table 삭제 후 OLM MASTER 기준 재 생성)
+
+DBCFG.20221209.045 TB_MY_ITEM Position nvarchar(50) 추가
+
+DBCFG.20230130.001 UPDATE XBOLTADM.TB_PROC_LOG_CONFIG SET FunctionNM = 'updateESRInfo.do' WHERE FunctionNM = 'processItsp.do' 
+										TB_PROC_LOG.TeamNM nvarchar(100) 추가
+
+DBCFG.20230417.001 XBOLTAPP.ESM_SR_ATTR, XBOLTAPP.ESM_SR_CAT_ATTR 테이블 추가  	   
+
+DBCFG.20230608.001 XBOLTADM.fn_GetMyAbsPathForList @Level 변수 추가 하여  MaxLevel 7미만으로 수정
+
+DBCFG.20230630.001 XBOLTAPP.ESM_SR_AREA.DefSRAreaID bigint NULL 칼럼추가  
+                   XBOLTAPP.ESM_SR_Cat.ManagerID bigint NULL 칼럼추가 	
+                   
+DBCFG.20230803.001 XBOLTAPP.ESM_SR_MST.Reason nvarchar --> char(2) 수정
+                   LN00388(용어) LN00389(요청기한), LN00390(작성일)  추가                   
+					      
+DBCFG.20230809.001 TB_DIC_MASTER   SRRSN    SR Reason 추가				
+
+DBCFG.20230817.001 TB_TFILTER ALLDIM_OPS itemTreeListByALLDIM_OPS_treeList 추가 
+
+DBCFG.20230830.001 [XBOLTADM].[TI_DELETE_ITEM_ATTR] 프로시저 추가     
+
+DBCFG.20230907.001 [XBOLTADM].[TW_TEAM_LOG].Seq  ID 사양 처리
+
+DBCFG.20230925.001 XBOLTADM.fn_CheckItemAuthorTransferable 함수 추가 

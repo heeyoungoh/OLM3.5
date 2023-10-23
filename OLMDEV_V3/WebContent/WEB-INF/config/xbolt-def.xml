@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC 
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+ 
+ 
+ <!-- ############################################################################################## -->
+ <!-- ==============   TILES CONFIG DEFINITIONS =============================================== -->
+ <!-- ############################################################################################## -->      
+ <tiles-definitions>
+ 	
+ 	<definition name=".default" template="/WEB-INF/jsp/custom/sf/master.jsp">
+		<put-attribute name="tagInc" value="/WEB-INF/jsp/template/tagInc.jsp" />
+		<put-attribute name="header" value="/WEB-INF/jsp/tiles/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/tiles/footer.jsp" />
+	</definition>
+	
+	<definition name="*/*/*" extends=".default">
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}/{3}.jsp"/>
+	</definition>
+	
+	<definition name="mainpage" extends=".default">
+	</definition>
+
+ </tiles-definitions>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>OLMV3</display-name>
+  <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
+  <context-param>
+    <param-name>log4jConfigLocation</param-name>
+    <param-value>classpath:log4j.properties</param-value>
+  </context-param>
+  <servlet>
+    <servlet-name>xbolt</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/config/*-context.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>xbolt</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+	<servlet-name>ExcelGenerator</servlet-name>
+	<servlet-class>xbolt.cmm.framework.util.ExcelGenerator</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>ExcelGenerator</servlet-name>
+	<url-pattern>/excelGenerate</url-pattern>
+  </servlet-mapping>
+  <servlet>
+	<servlet-name>PDFGenerator</servlet-name>
+	<servlet-class>xbolt.cmm.framework.util.PDFGenerator</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>PDFGenerator</servlet-name>
+	<url-pattern>/pdfGenerate</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+	<servlet-name>PDFGeneratorDiagram</servlet-name>
+	<servlet-class>xbolt.cmm.framework.util.PDFGeneratorDiagram</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>PDFGeneratorDiagram</servlet-name>
+	<url-pattern>/pdfGenerateDiagram</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+	<servlet-name>FileUploadHandler</servlet-name>
+	<servlet-class>xbolt.cmm.framework.dhtmlx.vault.FileUploadHandler</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>FileUploadHandler</servlet-name>
+	<url-pattern>/fileUploadHandler</url-pattern>
+  </servlet-mapping>  
+
+   <servlet>
+    <description></description>
+    <display-name>ExportServlet</display-name>
+    <servlet-name>ExportServlet</servlet-name>
+    <servlet-class>xbolt.cmm.framework.mxgraph.imageexport.ExportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExportServlet</servlet-name>
+    <url-pattern>/export</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+	<servlet-name>default</servlet-name>
+	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+  	  
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>
+   org.springframework.web.filter.CharacterEncodingFilter
+  </filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  
+  <filter>
+    <filter-name>XboltCrossFilterChain</filter-name>
+    <filter-class>xbolt.cmm.framework.filter.XboltCrossFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>XboltCrossFilterChain</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  
+  
+  <filter>
+    <filter-name>XboltFilterChain</filter-name>
+    <filter-class>xbolt.cmm.framework.filter.XboltFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>XboltFilterChain</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  
+  <welcome-file-list>
+   	<welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+  
+<security-constraint>
+ <display-name>Forbidden</display-name>
+    <web-resource-collection>
+        <web-resource-name>restricted methods</web-resource-name>
+         <url-pattern>/*</url-pattern>
+		 <http-method>PUT</http-method>
+		 <http-method>HEAD</http-method>
+		 <http-method>DELETE</http-method>
+		 <http-method>OPTIONS</http-method>
+		 <http-method>TRACE</http-method>
+    </web-resource-collection>
+     <auth-constraint />   
+</security-constraint>
+
+  
+ 
+<error-page>
+ <error-code>404</error-code>
+ <location>/WEB-INF/jsp/cmm/err/errorPage.jsp</location>
+</error-page>
+
+<error-page>
+ <error-code>403</error-code>
+ <location>/WEB-INF/jsp/cmm/err/errorPage.jsp</location>
+</error-page>
+ 
+ 
+ <error-page>
+ <error-code>500</error-code>
+<location>/WEB-INF/jsp/cmm/err/errorPage.jsp</location>
+ </error-page>
+ 
+ <error-page>
+ <exception-type>java.lang.Exception</exception-type>
+ <location>/WEB-INF/jsp/cmm/err/errorPage.jsp</location>
+ </error-page>
+ 
+ 
+ <error-page>
+ <exception-type>java.lang.Throwable</exception-type>
+ <location>/WEB-INF/jsp/cmm/err/errorPage.jsp</location>
+ </error-page>
+   
+</web-app> 
