@@ -1,0 +1,314 @@
+package xbolt.cmm.framework.util;
+
+import java.util.HashMap;
+import java.util.List;
+
+import xbolt.cmm.framework.util.NumberUtil;
+import xbolt.cmm.framework.util.StringUtil;
+import xbolt.cmm.framework.val.GlobalVal;
+
+/**
+ * 공통 서블릿 처리
+ * @Class Name : DiagramUtil.java
+ * @Description : Diagram 관련 처리를 위해 제공한다.
+ * @Modification Information
+ * @수정일		수정자		 수정내용
+ * @---------	---------	-------------------------------
+ * @2015. 04. 151. smartfactory		최초생성
+ *
+ * @since 2015. 04. 15.
+ * @version 1.0
+ * @see
+ * 
+ * Copyright (C) 2012 by SMARTFACTORY All right reserved.
+ */
+public class DiagramUtil {
+	
+	public static HashMap getMxGraphModelXml(HashMap cmmMap, String modelXML, List returnXml, List listTextXml) {
+		HashMap returnMap = new HashMap();
+		String diagramForXml="";
+		String updateForXml="";
+		String modelID  = StringUtil.checkNull(cmmMap.get("ModelID"));
+		String ItemID = StringUtil.checkNull(cmmMap.get("ItemID"));
+		String modelName = StringUtil.checkNull(cmmMap.get("modelName"));	
+		String dx = StringUtil.checkNull(cmmMap.get("Dx"));
+		String dy = StringUtil.checkNull(cmmMap.get("Dy"));
+		String modelType = StringUtil.checkNull(cmmMap.get("modelType"));	
+		String modelImgDir = GlobalVal.HTML_IMG_DIR_MODEL_SYMBOL;
+		String defClientID = GlobalVal.DEF_CLIENT_ID;
+		double SCALE_FACTOR_FOR_ARIS = 1;
+		int maxElementID = 0;
+		if(!StringUtil.checkNull(modelXML,"").equals("")){
+			diagramForXml = modelXML;
+		}else{
+			//List returnXml = (List)request.getAttribute("listXML");
+			
+			diagramForXml = "<mxGraphModel style=\"default-style2\" dx=\""+ dx+"\" dy=\""+dy+"\" grid=\"1\" guides=\"1\" tooltips=\"1\" connect=\"1\" fold=\"1\" page=\"1\" pageScale=\"1\" pageWidth=\"2339\" pageHeight=\"3300\">";
+			diagramForXml += "<root>";
+			diagramForXml += "<mxCell id=\"" + modelID + "\"/>";
+			diagramForXml += "<mxCell id=\"" + (Integer.parseInt(modelID)+1) + "\" parent=\"" + modelID + "\"/>";	
+			
+			maxElementID = (Integer.parseInt(modelID)+1);
+			if(returnXml!=null && returnXml.size()>0){
+				//set max element ID
+				int xmlSize = returnXml.size()-1;
+				HashMap maxList = new HashMap();
+				maxList = (HashMap)returnXml.get(xmlSize);
+				maxElementID=NumberUtil.getIntValue(StringUtil.checkNull(maxList.get("MaxElementID").toString()),1)+1;
+
+				updateForXml = "<process>";
+				String currElementID="";String currCategoryCode="";
+				for(int i = 0; i <= xmlSize; i++) {
+					HashMap getList = new HashMap();
+					getList = (HashMap)returnXml.get(i);
+					currElementID=StringUtil.checkNull(getList.get("ElementID"));
+					currCategoryCode=StringUtil.checkNull(getList.get("CategoryCode"));
+					String tempStr = StringUtil.checkNull(getList.get("PlainText")).replaceAll("'","′");// 작은 따옴표를 ′ 로 치환
+					String tooltip = StringUtil.checkNull(getList.get("Tooltip")).replaceAll("'","′");// 작은 따옴표를 ′ 로 치환
+					tooltip = tooltip.replaceAll("&#xa;"," ");
+					for(int j=0;j<GlobalVal.ENCODING_STRING.length; j++){tempStr=tempStr.replace(GlobalVal.ENCODING_STRING[j][1], GlobalVal.ENCODING_STRING[j][0]);}
+					for(int j=0;j<GlobalVal.ENCODING_STRING.length; j++){tempStr=tempStr.replace(GlobalVal.ENCODING_STRING[j][0], GlobalVal.ENCODING_STRING[j][1]);}
+					
+					for(int j=0;j<GlobalVal.ENCODING_STRING.length; j++){tooltip=tooltip.replace(GlobalVal.ENCODING_STRING[j][1], GlobalVal.ENCODING_STRING[j][0]);}
+					for(int j=0;j<GlobalVal.ENCODING_STRING.length; j++){tooltip=tooltip.replace(GlobalVal.ENCODING_STRING[j][0], GlobalVal.ENCODING_STRING[j][1]);}
+					tooltip = tooltip.replaceAll("(\r\n|\r|\n|\n\r)", " ");
+					if(!StringUtil.checkNull(getList.get("link")).equals("") && StringUtil.checkNull(getList.get("link")) != null && !StringUtil.checkNull(getList.get("link")).equals("0") ) {			
+						diagramForXml += "<UserObject ";
+						diagramForXml += "id=\"" + currElementID + "\" ";
+						if(!currCategoryCode.equals("MCN") && !currCategoryCode.equals("TXT") && !tooltip.equals("")){diagramForXml += "tooltip=\""+ tooltip + "\" ";}
+						if(!tempStr.equals("")){diagramForXml += "label=\"" + tempStr + "\" ";}		
+						diagramForXml += "link=\""+ StringUtil.checkNull(getList.get("link")) + "\" ";	
+						diagramForXml += "clientID=\""+ defClientID + "\" ";	
+						if(i == 0) { diagramForXml += "modelID=\""+ modelID + "\" "; }
+						diagramForXml += ">";
+						diagramForXml += "<mxCell ";
+					}
+					else {
+						diagramForXml += "<mxCell id=\"" + currElementID + "\" ";			
+						if(!tempStr.equals("")){diagramForXml += "value=\"" + tempStr + "\" ";}
+					}			
+					
+					diagramForXml += "style=\"";	
+					String style=StringUtil.checkNull(getList.get("Style"));
+					if(!style.equals("")) {diagramForXml += style + ";";
+						/*if(style.equals("shape=process;whiteSpace=wrap;size=0.025")){
+							updateForXml += "<update id=\""+currElementID+"\" LovCodeLV37=\""+getList.get("LovCodeLV37").toString()+"\" AttrTypeCodeAT37=\""+getList.get("AttrTypeCodeAT37").toString()+"\" type=\""+getList.get("WarningType").toString()+"\"/>";
+						}
+						
+						if(StringUtil.checkNull(getList.get("SymTypeCode")).equals("SB00007") && !StringUtil.checkNull(getList.get("PEIStatus")).equals("") ){
+							updateForXml += "<update id=\""+currElementID+"\" type=\"status\"  PEIStatus=\""+StringUtil.checkNull(getList.get("PEIStatus"))+"\"  />";
+						}
+						*/
+					
+						if(!StringUtil.checkNull(getList.get("ItemTypeCode")).equals("OJ00002") && StringUtil.checkNull(getList.get("ElmItemID")).equals("0")  &&   !StringUtil.checkNull(getList.get("ElmInstYN")).equals("Y") ){
+							updateForXml += "<update id=\""+currElementID+"\" type=\"warning\"  PEIStatus=\""+StringUtil.checkNull(getList.get("PEIStatus"))+"\"  />";
+						}
+						
+						
+					}		
+					if(!StringUtil.checkNull(getList.get("strokeColor")).equals("")){
+						if(modelType.equals("VIEW")){						
+							diagramForXml += "strokeColor=" + (getList.get("strokeColor").toString().equals("FF0000")? "#FF0000":getList.get("strokeColor").toString()) + ";";
+						}else{
+							diagramForXml += "strokeColor=" + getList.get("strokeColor").toString() + ";";
+						}
+					}		
+					if(!StringUtil.checkNull(getList.get("strokeWidth")).equals("") && !StringUtil.checkNull(getList.get("strokeWidth")).equals("0")){diagramForXml += "strokeWidth=" + getList.get("strokeWidth").toString() + ";";	}		
+					if(!StringUtil.checkNull(getList.get("gradientColor")).equals("")){diagramForXml += "gradientColor=" + getList.get("gradientColor").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("fillColor")).equals("")){diagramForXml += "fillColor=" + getList.get("fillColor").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("startArrow")).equals("")) {diagramForXml += "startArrow=" + getList.get("startArrow").toString() + ";";}
+					if(!StringUtil.checkNull(getList.get("endArrow")).equals("")) {diagramForXml += "endArrow=" + getList.get("endArrow").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("edgeStyle")).equals("")) {diagramForXml += "edgeStyle=" + getList.get("edgeStyle").toString() + ";";}
+					if(currCategoryCode.equals("CN") || currCategoryCode.equals("MCN") || currCategoryCode.equals("ST1")){
+						if(!StringUtil.checkNull(getList.get("EntryX")).equals("")) {diagramForXml += "entryX=" + getList.get("EntryX").toString() + ";";}		
+						if(!StringUtil.checkNull(getList.get("EntryY")).equals("")) {diagramForXml += "entryY=" + getList.get("EntryY").toString() + ";";}	
+						if(!StringUtil.checkNull(getList.get("EntryPerimeter")).equals("")) {diagramForXml += "entryPerimeter=" + getList.get("EntryPerimeter").toString()+ ";";}
+						//if(!StringUtil.checkNull(getList.get("EntryX")).equals("")  && !getList.get("CategoryCode").toString().equals("MCN") && !StringUtil.checkNull(getList.get("EntryX")).equals("0.0")) {diagramForXml += "entryX=" + getList.get("EntryX").toString() + ";";}		
+						//if(!StringUtil.checkNull(getList.get("EntryY")).equals("")  && !getList.get("CategoryCode").toString().equals("MCN") && !StringUtil.checkNull(getList.get("EntryY")).equals("0.0")) {diagramForXml += "entryY=" + getList.get("EntryY").toString() + ";";}	
+						//if(!StringUtil.checkNull(getList.get("EntryPerimeter")).equals("")  && !getList.get("CategoryCode").toString().equals("MCN") && !StringUtil.checkNull(getList.get("EntryPerimeter")).equals("0.0")) {diagramForXml += "entryPerimeter=" + getList.get("EntryPerimeter").toString()+ ";";}
+					}
+					if(!StringUtil.checkNull(getList.get("ExitX")).equals("")) {diagramForXml += "exitX=" + getList.get("ExitX").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("ExitY")).equals("")) {diagramForXml += "exitY=" + getList.get("ExitY").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("ExitPerimeter")).equals("")) {diagramForXml += "exitPerimeter=" + getList.get("ExitPerimeter").toString() + ";";}			
+					
+					if(!StringUtil.checkNull(getList.get("fontSize"),"0").equals("0")) {diagramForXml += "fontSize=" + getList.get("fontSize").toString() + ";";}	
+					if(!StringUtil.checkNull(getList.get("Rotation")).equals("") && !StringUtil.checkNull(getList.get("Rotation")).equals("0")) {diagramForXml += "rotation=" + getList.get("Rotation").toString()+";";}	
+					if(!StringUtil.checkNull(getList.get("GradientDirection")).equals("") && !StringUtil.checkNull(getList.get("GradientDirection")).equals("0")) {diagramForXml += "gradientDirection=" + getList.get("GradientDirection").toString()+";";}	
+					if(!StringUtil.checkNull(getList.get("Opacity")).equals("") && !StringUtil.checkNull(getList.get("Opacity")).equals("0")) {diagramForXml += "opacity=" + getList.get("Opacity").toString()+";";}
+					if(!StringUtil.checkNull(getList.get("Shadow")).equals("")  && !getList.get("CategoryCode").toString().equals("MCN") && !StringUtil.checkNull(getList.get("Shadow")).equals("0")) {diagramForXml += "shadow=" + getList.get("Shadow").toString()+";";}
+					if(!StringUtil.checkNull(getList.get("Dashed")).equals("")  && !StringUtil.checkNull(getList.get("Dashed")).equals("0")) {diagramForXml += "dashed=" + getList.get("Dashed").toString()+";";}
+					if(!StringUtil.checkNull(getList.get("Rounded")).equals("")  && !StringUtil.checkNull(getList.get("Rounded")).equals("0")) {diagramForXml += "rounded=" + getList.get("Rounded").toString()+";";}
+					if(!StringUtil.checkNull(getList.get("SpacingTop")).equals("")  && !StringUtil.checkNull(getList.get("SpacingTop")).equals("0")) {diagramForXml += "spacingTop=" + getList.get("SpacingTop").toString() + ";";}
+					if(!StringUtil.checkNull(getList.get("LabelBackgroundColor")).equals("")) {diagramForXml += "labelBackgroundColor=" + getList.get("LabelBackgroundColor").toString() + ";";}	
+					if(!StringUtil.checkNull(getList.get("LabelBorderColor")).equals("")) {diagramForXml += "labelBorderColor=" + getList.get("LabelBorderColor").toString() + ";";}
+					if(!StringUtil.checkNull(getList.get("FontFamily")).equals("")) {diagramForXml += "fontFamily=" + getList.get("FontFamily").toString() + ";";}
+					if(!StringUtil.checkNull(getList.get("FontStyle")).equals("")) {diagramForXml += "fontStyle=" + getList.get("FontStyle").toString() + ";";}
+					if(!StringUtil.checkNull(getList.get("fontColor")).equals("")) {diagramForXml += "fontColor=" + getList.get("fontColor").toString() + ";";}	
+					if(!StringUtil.checkNull(getList.get("StartFill")).equals("") && !StringUtil.checkNull(getList.get("StartFill")).equals("-1")) {diagramForXml += "startFill=" + getList.get("StartFill").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("EndFill")).equals("") && !StringUtil.checkNull(getList.get("EndFill")).equals("-1")) {diagramForXml += "endFill=" + getList.get("EndFill").toString() + ";";}
+					if(!StringUtil.checkNull(getList.get("StartSize")).equals("") && !StringUtil.checkNull(getList.get("StartSize")).equals("0")) {diagramForXml += "startSize=" + getList.get("StartSize").toString() + ";";}		
+					if(!StringUtil.checkNull(getList.get("EndSize")).equals("") && !StringUtil.checkNull(getList.get("EndSize")).equals("0")) {diagramForXml += "endSize=" + getList.get("EndSize").toString() + ";";}	
+					if(!StringUtil.checkNull(getList.get("SymTypeCode")).equals("") && !StringUtil.checkNull(getList.get("SymTypeCode")).equals("0")) {diagramForXml += "symTypeCode=" + getList.get("SymTypeCode").toString();}
+					diagramForXml += "\" ";
+					diagramForXml += "parent=\"";		
+					diagramForXml += getList.get("Parent").toString();
+					diagramForXml += "\" ";	
+					
+					if(currCategoryCode.equals("CN") || currCategoryCode.equals("MCN") || currCategoryCode.equals("ST1") && getList.get("Relative").toString().equals("1")) {			
+						
+						if(StringUtil.checkNull(getList.get("Relative")).equals("1")){
+							diagramForXml += "edge=\"1\" ";	}else{ diagramForXml += "vertex=\"1\" ";	 }
+						if(!StringUtil.checkNull(getList.get("FromID")).equals("")) {diagramForXml += "source=\"" + getList.get("FromID").toString() + "\" ";}			
+						if(!StringUtil.checkNull(getList.get("ToID")).equals("")) {diagramForXml += "target=\"" + getList.get("ToID").toString() + "\">";}			
+						//diagramForXml += "<mxGeometry as=\"geometry\">";
+						
+						diagramForXml += "<mxGeometry ";
+						
+						if(!StringUtil.checkNull(getList.get("PositionX")).equals("")) {
+							//double x = Double.parseDouble(getList.get("PositionX").toString())*SCALE_FACTOR_FOR_ARIS;
+							//diagramForXml += "x=\"" + (int)x + "\" ";
+							diagramForXml += "x=\"" + NumberUtil.getFloatValue(getList.get("PositionX"),0) + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("PositionY")).equals("")) {
+							//double y = Double.parseDouble(getList.get("PositionY").toString())*SCALE_FACTOR_FOR_ARIS; 
+							//diagramForXml += "y=\"" + (int)y + "\" ";
+							diagramForXml += "y=\"" + NumberUtil.getFloatValue(getList.get("PositionY"),0)+ "\" ";
+						}	
+								
+						diagramForXml += "as=\"geometry\" ";
+						
+						if(!StringUtil.checkNull(getList.get("Relative")).equals("")) {
+							double h = Integer.parseInt(getList.get("Relative").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "relative=\"" + (int)h + "\" ";				
+						}
+						
+						if(!StringUtil.checkNull(getList.get("Width")).equals("")) {
+							double w = Double.parseDouble(getList.get("Width").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "width=\"" + (int)w + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("Height")).equals("")) {
+							double h = Double.parseDouble(getList.get("Height").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "height=\"" + (int)h + "\" ";				
+						}	
+						
+						diagramForXml += ">";	
+						
+						if(!StringUtil.checkNull(getList.get("Path")).equals("")){diagramForXml += getList.get("Path");}			
+						diagramForXml += "</mxGeometry>";
+					}
+					else {
+						diagramForXml += "vertex=\"1\">"; 
+						diagramForXml += "<mxGeometry as=\"geometry\" ";
+						
+						if(!StringUtil.checkNull(getList.get("PositionX")).equals("")) {
+							double x = Double.parseDouble(getList.get("PositionX").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "x=\"" + (int)x + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("PositionY")).equals("")) {
+							double y = Double.parseDouble(getList.get("PositionY").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "y=\"" + (int)y + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("Width")).equals("")) {
+							double w = Double.parseDouble(getList.get("Width").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "width=\"" + (int)w + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("Height")).equals("")) {
+							double h = Double.parseDouble(getList.get("Height").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "height=\"" + (int)h + "\" ";				
+						}
+						if(!StringUtil.checkNull(getList.get("Relative")).equals("")) {
+							double h = Integer.parseInt(getList.get("Relative").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "relative=\"" + (int)h + "\" ";				
+						}
+						if(!StringUtil.checkNull(getList.get("Rotation")).equals("")) {
+							double h = Integer.parseInt(getList.get("Rotation").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "rotation=\"" + (int)h + "\" ";				
+						}
+						
+						diagramForXml += "/>";	
+					}		
+					diagramForXml += "</mxCell>";	
+					if(!StringUtil.checkNull(getList.get("link")).equals("") && !getList.get("link").toString().equals("0")) {diagramForXml += "</UserObject>";}	
+				}	
+			}
+			
+			//Process Text returnXml = (List)request.getAttribute("listTextXml");
+			if(listTextXml!=null && listTextXml.size()>0){
+				for(int i = 0; i < listTextXml.size(); i++) {
+					maxElementID= maxElementID+i+1;
+					HashMap getList = new HashMap();
+					getList = (HashMap)listTextXml.get(i);
+					
+					String tempStr = StringUtil.checkNull(getList.get("PlainText")).replaceAll("'","′").replaceAll("<br>","&#10;");// 작은 따옴표를 ′ 로 치환;
+					for(int j=0;j<GlobalVal.ENCODING_STRING.length; j++){
+						tempStr=tempStr.replace(GlobalVal.ENCODING_STRING[j][1], GlobalVal.ENCODING_STRING[j][0]);
+					}
+					for(int j=0;j<GlobalVal.ENCODING_STRING.length; j++){
+						tempStr=tempStr.replace(GlobalVal.ENCODING_STRING[j][0], GlobalVal.ENCODING_STRING[j][1]);
+					}
+					
+					diagramForXml += "<mxCell id=\"" +"MD_"+ maxElementID + "\" "; //  model display Id unique 하게 수정
+					String imageType = ".png";
+					if(StringUtil.checkNull(getList.get("DisplayType")).equals("Animation") || StringUtil.checkNull(getList.get("AttrTypeCode")).equals("TLINK")){imageType=".gif";}
+					if(StringUtil.checkNull(getList.get("DisplayType")).equals("Image") || StringUtil.checkNull(getList.get("DisplayType")).equals("Animation") ){ // Image일경우 	
+						if(StringUtil.checkNull(getList.get("AttrTypeCode")).equals("TLINK")){ diagramForXml += "TLink=\""+StringUtil.checkNull(getList.get("Link")) + "\" "; 
+						} else if( StringUtil.checkNull(getList.get("AttrTypeCode")).equals("FILELINK")) {
+							 diagramForXml += "FileLink=\""+StringUtil.checkNull(getList.get("Link")) + "\" "; 
+						}
+						
+						diagramForXml+="style=\"image;image="+modelImgDir+"/display/"+StringUtil.checkNull(getList.get("PlainText"))+imageType+";spacingTop=-50;labelBackgroundColor=none;symTypeCode=defImg\" parent=\""+StringUtil.checkNull(getList.get("Parent"))+"\" vertex=\"1\" >";
+						diagramForXml += "<mxGeometry x=\"" + NumberUtil.getFloatValue(getList.get("PositionX"),0) + "\" ";
+						diagramForXml += "y=\"" + NumberUtil.getFloatValue(getList.get("PositionY"),0) + "\" ";
+						diagramForXml += "width=\"" + NumberUtil.getFloatValue(getList.get("Width"),0) + "\" ";
+						diagramForXml += "height=\"" + NumberUtil.getFloatValue(getList.get("Height"),0) + "\" ";
+						diagramForXml += "as=\"geometry\"/>";
+						diagramForXml+="</mxCell>";						
+					}else{ // Image가 아닐경우 
+						if(!tempStr.equals("")){diagramForXml += "value=\"" + tempStr + "\" ";}
+						diagramForXml += "style=\"";	
+						if(!StringUtil.checkNull(getList.get("Style")).equals("")){diagramForXml += StringUtil.checkNull(getList.get("Style")) + ";";}		
+						if(!StringUtil.checkNull(getList.get("fontSize"),"0").equals("0")) {diagramForXml += "fontSize=" + StringUtil.checkNull(getList.get("fontSize")) + ";";}	
+						if(!StringUtil.checkNull(getList.get("SpacingTop")).equals("")  && !StringUtil.checkNull(getList.get("SpacingTop")).equals("0")) {diagramForXml += "spacingTop=" + StringUtil.checkNull(getList.get("SpacingTop")) + ";";}
+						if(!StringUtil.checkNull(getList.get("FontFamily")).equals("")) {diagramForXml += "fontFamily=" + StringUtil.checkNull(getList.get("FontFamily")) + ";";}
+						if(!StringUtil.checkNull(getList.get("FontStyle")).equals("")) {diagramForXml += "fontStyle=" + StringUtil.checkNull(getList.get("FontStyle")) + ";";}
+						if(!StringUtil.checkNull(getList.get("fontColor")).equals("")) {diagramForXml += "fontColor=" + StringUtil.checkNull(getList.get("fontColor")) + ";";}
+						if(!StringUtil.checkNull(getList.get("fillColor")).equals("")) {diagramForXml += "fillColor=" + StringUtil.checkNull(getList.get("fillColor")) + ";";}
+						diagramForXml += "align=left;AttrType=Identifier;\" ";
+						diagramForXml += "parent=\"";		
+						diagramForXml += StringUtil.checkNull(getList.get("Parent"));
+						diagramForXml += "\" ";	
+						diagramForXml += "vertex=\"1\">";
+						diagramForXml += "<mxGeometry as=\"geometry\" ";
+						
+						if(!StringUtil.checkNull(getList.get("PositionX")).equals("")) {
+							double x = Double.parseDouble(getList.get("PositionX").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "x=\"" + (int)x + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("PositionY")).equals("")) {
+							double y = Double.parseDouble(getList.get("PositionY").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "y=\"" + (int)y + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("Width")).equals("")) {
+							double w = Double.parseDouble(getList.get("Width").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "width=\"" + (int)w + "\" ";
+						}			
+						if(!StringUtil.checkNull(getList.get("Height")).equals("")) {
+							double h = Double.parseDouble(getList.get("Height").toString())*SCALE_FACTOR_FOR_ARIS; 
+							diagramForXml += "height=\"" + (int)h + "\" ";				
+						}
+						diagramForXml += "/>";	
+						diagramForXml += "</mxCell>";	
+					}
+				}	
+			}
+			diagramForXml += "</root>";
+			diagramForXml += "</mxGraphModel>";	
+			
+			updateForXml += "</process>";
+		}		
+		returnMap.put("diagramForXml", diagramForXml);
+		returnMap.put("updateForXml", updateForXml);
+		return returnMap;	
+	}
+
+}
